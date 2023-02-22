@@ -45,7 +45,7 @@ namespace WebDongTrung.Repositories
 
         public async Task<ProductModel> GetProductAsync(int id)
         {
-            var product = await _contex.Products!.FindAsync();
+            var product = await _contex.Products!.FindAsync(id);
             return _mapper.Map<ProductModel>(product);
         }
 
@@ -57,6 +57,17 @@ namespace WebDongTrung.Repositories
                 _contex.Products!.Update(product);
                 await _contex.SaveChangesAsync();
             }
+        }
+
+        public async Task<decimal?> TongPriceAsync()
+        {
+            var products = await GetAllProductAsync();
+            decimal? price = null;
+            foreach (ProductModel s in products)
+            {
+                price += s.Price;
+            }
+            return price;
         }
     }
 }

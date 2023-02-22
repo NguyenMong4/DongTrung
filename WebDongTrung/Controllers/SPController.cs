@@ -13,17 +13,28 @@ namespace WebDongTrung.Controllers
     {
         private readonly IProducts _product;
 
-        public SPController(IProducts product){
+        public SPController(IProducts product)
+        {
             _product = product;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllProduct(){
-            try{
+        public async Task<IActionResult> GetAllProduct()
+        {
+            try
+            {
                 return Ok(await _product.GetAllProductAsync());
             }
-            catch{
+            catch
+            {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProduct(int id)
+        {
+            var product = await _product.GetProductAsync(id);
+            return product == null ? NotFound() : Ok(product);
         }
     }
 }

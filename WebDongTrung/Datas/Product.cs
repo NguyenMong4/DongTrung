@@ -13,9 +13,11 @@ namespace WebDongTrung.Datas
         public int ProductType { get; set; }
         public string? Description { get; set; }
         public decimal? Price { get; set; }
-        public int Discount { get; set; }
-        public string GeneralInformation { get; set; }
-        public string Photo { get; set; }
+        public int? Discount { get; set; }
+        public string? GeneralInformation { get; set; }
+        public string? Photo { get; set; }
+        public int ProductForeignKey{get;set;}
+        public virtual ICollection<CartDetail> CartDetails { get; set; }
 
     }
 }
