@@ -37,10 +37,10 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<List<ProductModel>> GetAllProductAsync()
+        public async Task<IEnumerable<ProductModel>> GetAllProductAsync()
         {
             var products = await _contex.Products!.ToListAsync();
-            return _mapper.Map<List<ProductModel>>(products);
+            return _mapper.Map<IEnumerable<ProductModel>>(products);
         }
 
         public async Task<ProductModel> GetProductAsync(int id)

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebDongTrung.Datas;
 
@@ -10,9 +11,10 @@ using WebDongTrung.Datas;
 namespace WebDongTrung.Migrations
 {
     [DbContext(typeof(StoreDbContex))]
-    partial class StoreDbContexModelSnapshot : ModelSnapshot
+    [Migration("20230222081710_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,20 +31,18 @@ namespace WebDongTrung.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Photo")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Position")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Advertisements");
                 });
@@ -127,17 +127,10 @@ namespace WebDongTrung.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(2);
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("IdCart", "IdProduct");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("IdProduct");
 
                     b.ToTable("CartDetails");
                 });
@@ -256,6 +249,7 @@ namespace WebDongTrung.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
 
@@ -296,32 +290,6 @@ namespace WebDongTrung.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
-                });
-
-            modelBuilder.Entity("WebDongTrung.Datas.Advertisement", b =>
-                {
-                    b.HasOne("WebDongTrung.Datas.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("WebDongTrung.Datas.CartDetail", b =>
-                {
-                    b.HasOne("WebDongTrung.Datas.Cart", "Cart")
-                        .WithMany()
-                        .HasForeignKey("CartId");
-
-                    b.HasOne("WebDongTrung.Datas.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("WebDongTrung.Datas.Product", b =>

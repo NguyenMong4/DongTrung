@@ -12,10 +12,12 @@ namespace WebDongTrung.Datas
         [Key]
         [Column(Order =1)]
         public int IdCart { get; set; }
+        public virtual Cart? Cart{get;set;}
         [Key]
         [Column(Order =2)]
         [ForeignKey("Product")]
         public int IdProduct { get; set; }
+        public virtual Product? Product{get;set;}
         public int Quantity { get; set; }
     }
 }

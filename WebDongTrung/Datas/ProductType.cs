@@ -13,6 +13,6 @@ namespace WebDongTrung.Datas
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(400)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

@@ -12,9 +12,10 @@ namespace WebDongTrung.Datas
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Photo { get; set; }
+        public string? Photo { get; set; }
         public int IdProduct { get; set; }
-        public string Position { get; set; }
-        public string Status { get; set; }
+        public virtual Product? Product{get;set;}
+        public string? Position { get; set; }
+        public string? Status { get; set; }
     }
 }

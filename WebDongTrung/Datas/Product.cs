@@ -10,12 +10,12 @@ namespace WebDongTrung.Datas
         public int Id { get; set; }
         [MaxLength(2000)]
         public string? Name { get; set; }
-        public int ProductType { get; set; }
+        public int? ProductTypeId { get; set; }
+        public virtual ProductType? ProductType { get; set; }
         public string? Description { get; set; }
         public decimal? Price { get; set; }
         public int? Discount { get; set; }
         public string? GeneralInformation { get; set; }
         public string? Photo { get; set; }
-
     }
 }
