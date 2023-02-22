@@ -21,7 +21,7 @@ namespace WebDongTrung.Repositories
 
         public async Task<string?> AddEmployeeAsync(Employee employee)
         {
-            _contex.Employees!.AddAsync(employee);
+            _contex.Employees.AddAsync(employee);
             await _contex.SaveChangesAsync();
             return employee.Id;
         }

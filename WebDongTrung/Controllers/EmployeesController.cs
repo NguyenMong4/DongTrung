@@ -12,7 +12,7 @@ namespace WebDongTrung.Controllers
     [Route("api/[controller]")]
     public class EmployeesController : ControllerBase
     {
-              private readonly IEmployees _employee;
+        private readonly IEmployees _employee;
 
         public EmployeesController(IEmployees employee)
         {
@@ -54,23 +54,29 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEmployee(string id, Employee employee){
-            try{
-                await _employee.UpdateEmployeeAsync(id,employee);
+        public async Task<IActionResult> UpdateEmployee(string id, Employee employee)
+        {
+            try
+            {
+                await _employee.UpdateEmployeeAsync(id, employee);
                 return Ok();
             }
-            catch{
+            catch
+            {
                 return BadRequest();
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(string id){
-            try{
+        public async Task<IActionResult> DeleteEmployee(string id)
+        {
+            try
+            {
                 await _employee.DeleteEmployeeAsync(id);
                 return Ok();
             }
-            catch{
+            catch
+            {
                 return BadRequest();
             }
 

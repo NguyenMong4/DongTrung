@@ -19,6 +19,7 @@ builder.Services.AddDbContext<StoreDbContex>(options => options.UseMySql(connect
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IProducts, ProductRepositories>();
 builder.Services.AddScoped<IEmployees, EmployeeRepo>();
+builder.Services.AddScoped<ICart,CartRepo>();
 
 var app = builder.Build();
 
