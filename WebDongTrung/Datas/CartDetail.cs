@@ -17,7 +17,5 @@ namespace WebDongTrung.Datas
         [ForeignKey("Product")]
         public int IdProduct { get; set; }
         public int Quantity { get; set; }
-        public virtual List<Cart> Cart {get;set;}
-        public virtual List<Product> Products{get;set;}
     }
 }

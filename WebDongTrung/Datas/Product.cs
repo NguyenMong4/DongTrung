@@ -16,8 +16,6 @@ namespace WebDongTrung.Datas
         public int? Discount { get; set; }
         public string? GeneralInformation { get; set; }
         public string? Photo { get; set; }
-        public int ProductForeignKey{get;set;}
-        public virtual ICollection<CartDetail> CartDetails { get; set; }
 
     }
 }
