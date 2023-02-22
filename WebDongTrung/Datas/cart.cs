@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class cart : SystemProperties
+    public class Cart : SystemProperties
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
