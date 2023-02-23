@@ -1,17 +1,13 @@
-using System.Security.Cryptography.X509Certificates;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using WebDongTrung.Datas;
 
-namespace WebDongTrung.Datas
+namespace WebDongTrung.Models
 {
-    public class Cart : SystemProperties
+    public class CartModel : SystemProperties
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int TotalPrice { get; set; }
         public int Status { get; set; }
@@ -20,6 +16,7 @@ namespace WebDongTrung.Datas
         public string? Note { get; set; }
         public int Payment { get; set; }
         public string PersonName { get; set; }
-        public DateTime ReceivedDate {get;set;}
+        public DateTime ReceivedDate {get;set;} = DateTime.Now.AddDays(4);
+        public CartDetailModel CartDetailModel {get;set;}
     }
 }

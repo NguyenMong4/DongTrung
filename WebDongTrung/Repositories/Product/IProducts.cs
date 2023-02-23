@@ -10,11 +10,10 @@ namespace WebDongTrung.Repositories
 {
     public interface IProducts
     {
-        public Task<IEnumerable<ProductModel>> GetAllProductAsync();
-        public Task<ProductModel> GetProductAsync(int id);
-        public Task<int> AddProductAsync(ProductModel model);
-        public Task UpdateProductAsync(int id, ProductModel model);
+        public Task<IEnumerable<Product>> GetAllProductAsync();
+        public Task<Product> GetProductAsync(int id);
+        public Task<int> AddProductAsync(Product product);
+        public Task UpdateProductAsync(int id, Product product);
         public Task DeleteProductAsync(int id);
-        public Task<decimal?> TongPriceAsync();
     }
 }

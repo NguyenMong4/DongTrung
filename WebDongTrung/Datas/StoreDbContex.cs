@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebDongTrung.Datas
 {
-    public class StoreDbContex : DbContext
+    public class StoreDbContex : IdentityDbContext<ApplicationUser>
     {
         public StoreDbContex(DbContextOptions<StoreDbContex> options) : base(options) { }
 
@@ -17,6 +18,7 @@ namespace WebDongTrung.Datas
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CartDetail>().HasKey(p => new { p.IdCart, p.IdProduct });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

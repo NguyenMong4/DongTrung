@@ -13,6 +13,8 @@ namespace WebDongTrung.Helper
         public ApplicationMapper()
         {
             CreateMap<Product,ProductModel>().ReverseMap();
+            CreateMap<Cart,CartModel>().ReverseMap();
+            CreateMap<CartDetail, CartDetailModel>().ReverseMap();
         }
     }
 }

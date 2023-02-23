@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebDongTrung.Datas;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
@@ -39,7 +40,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProduct(ProductModel productModel)
+        public async Task<ActionResult> AddProduct(Product productModel)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, ProductModel productModel){
+        public async Task<IActionResult> UpdateProduct(int id, Product productModel){
             try{
                 await _product.UpdateProductAsync(id,productModel);
                 return Ok();
@@ -73,7 +74,6 @@ namespace WebDongTrung.Controllers
             catch{
                 return BadRequest();
             }
-
         }
     }
 }

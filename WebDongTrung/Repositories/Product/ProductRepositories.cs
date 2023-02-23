@@ -19,12 +19,12 @@ namespace WebDongTrung.Repositories
             _contex = context;
             _mapper = mapper;
         }
-        public async Task<int> AddProductAsync(ProductModel model)
+        public async Task<int> AddProductAsync(Product product)
         {
-            var newProduct = _mapper.Map<Product>(model);
-            _contex.Products!.Add(newProduct);
+            
+            _contex.Products!.Add(product);
             await _contex.SaveChangesAsync();
-            return newProduct.Id;
+            return product.Id;
         }
 
         public async Task DeleteProductAsync(int id)
@@ -37,19 +37,19 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<IEnumerable<ProductModel>> GetAllProductAsync()
+        public async Task<IEnumerable<Product>> GetAllProductAsync()
         {
             var products = await _contex.Products!.ToListAsync();
-            return _mapper.Map<IEnumerable<ProductModel>>(products);
+            return _mapper.Map<IEnumerable<Product>>(products);
         }
 
-        public async Task<ProductModel> GetProductAsync(int id)
+        public async Task<Product> GetProductAsync(int id)
         {
             var product = await _contex.Products!.FindAsync(id);
-            return _mapper.Map<ProductModel>(product);
+            return _mapper.Map<Product>(product);
         }
 
-        public async Task UpdateProductAsync(int id, ProductModel model)
+        public async Task UpdateProductAsync(int id, Product model)
         {
             if (id == model.Id)
             {
@@ -59,15 +59,5 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<decimal?> TongPriceAsync()
-        {
-            var products = await GetAllProductAsync();
-            decimal? price = null;
-            foreach (ProductModel s in products)
-            {
-                price += s.Price;
-            }
-            return price;
-        }
     }
 }

@@ -10,14 +10,15 @@ namespace WebDongTrung.Datas
     public class CartDetail
     {
         [Key]
-        [Column(Order =1)]
+        [Column(Order = 1)]
         public int IdCart { get; set; }
-        public virtual Cart? Cart{get;set;}
+        public virtual Cart? Cart { get; set; }
         [Key]
-        [Column(Order =2)]
+        [Column(Order = 2)]
         [ForeignKey("Product")]
         public int IdProduct { get; set; }
-        public virtual Product? Product{get;set;}
+        public virtual Product? Product { get; set; }
         public int Quantity { get; set; }
+        public int Price { get; set; }
     }
 }
