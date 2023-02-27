@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class Warehouse
+    public class Warehouse : SystemProperties
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        [Key]
         public int IdProduct { get; set; }
+        public Product Products {get;set;}
         public int ImportQuantity { get; set; }
-        public int ImportPrice { get; set; }
-        public int RealityQuantity {get;set;}
-        public int SystemQuantity {get;set;}
+        public int? ImportPrice { get; set; }
+        public int? RealityQuantity {get;set;}
+        public int? SystemQuantity {get;set;}
     }
 }

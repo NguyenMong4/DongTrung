@@ -13,15 +13,56 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
+        public static int PageSize {get;set;} = 1;
 
         public ProductRepositories(StoreDbContex context, IMapper mapper)
         {
             _contex = context;
             _mapper = mapper;
         }
+
+        public List<ProductModel> GetAllProduct(string search, string sortBy, int page = 1)
+        {
+            var allProduct = _contex.Products!.AsQueryable();
+            //searching
+            if (!string.IsNullOrEmpty(search))
+            {
+                allProduct = allProduct.Where(p => p.Name!.Contains(search));
+            }
+            allProduct = allProduct.OrderBy(p => p.Name);
+
+            //sorting
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "price_desc":
+                        allProduct = allProduct.OrderByDescending(p => p.Price);
+                        break;
+                    case "price_asc":
+                        allProduct = allProduct.OrderBy(p => p.Price);
+                        break;
+                }
+            }
+
+            //page
+
+            allProduct = allProduct.Skip((page - 1)* PageSize).Take(PageSize);
+
+            var result = allProduct.Select(p => new ProductModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Discount = p.Discount,
+                Photo = p.Photo
+            });
+
+            return result.ToList();
+        }
+
         public async Task<int> AddProductAsync(Product product)
         {
-            
             _contex.Products!.Add(product);
             await _contex.SaveChangesAsync();
             return product.Id;
@@ -58,6 +99,5 @@ namespace WebDongTrung.Repositories
                 await _contex.SaveChangesAsync();
             }
         }
-
     }
 }

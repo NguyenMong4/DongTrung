@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -43,11 +44,34 @@ namespace WebDongTrung.Repositories
             return await _contex.Carts!.FindAsync(id);
         }
 
-        public async Task UpDateCartAsync(int id, Cart cart)
+        public async Task UpDateCartAsync(int id, CartModel cartModel)
         {
-            if (id == cart.Id)
+            if (id == cartModel.Id)
             {
-                 _contex.Carts!.Update(cart);
+                var cart = _mapper.Map<Cart>(cartModel);
+                cart.UpdateAt = DateTime.Now;
+                _contex.Carts!.Update(cart);
+                foreach (var item in cartModel.CartDetailModel)
+                {
+                    var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
+                    if (product != null)
+                    {
+                        //trạng thái : đang giao hàng
+                        if (cart.Status == 1)
+                        {
+                            product.RealityQuantity -= item.Quantity;
+                        }
+                        else if (cart.Status == 2) // trạng thái: giao hàng thành công
+                        {
+                            product.SystemQuantity -= item.Quantity;
+                        }
+                        else if(cart.Status == 3) //trạng thái : Hoàn đơn
+                        {
+                            product.RealityQuantity += item.Quantity;
+                        }
+                        _contex.Products!.Update(product);
+                    }
+                }
                 await _contex.SaveChangesAsync();
             }
         }

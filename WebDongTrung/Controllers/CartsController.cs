@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
 namespace WebDongTrung.Controllers
@@ -51,7 +52,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCart(int id, Cart cart)
+        public async Task<IActionResult> UpdateCart(int id, CartModel cart)
         {
             try
             {

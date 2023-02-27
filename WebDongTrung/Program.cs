@@ -27,6 +27,8 @@ builder.Services.AddScoped<IProducts, ProductRepositories>();
 builder.Services.AddScoped<IEmployees, EmployeeRepo>();
 builder.Services.AddScoped<ICart, CartRepo>();
 builder.Services.AddScoped<ICartClient, CartClientRepo>();
+builder.Services.AddScoped<IWarehouse, WarehouseRepo>();
+
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class CartDetail
+    public class CartDetail : SystemProperties
     {
         [Key]
         [Column(Order = 1)]

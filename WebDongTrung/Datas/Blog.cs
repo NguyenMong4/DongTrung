@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class Blog
+    public class Blog : SystemProperties
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

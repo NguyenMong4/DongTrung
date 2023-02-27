@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.Models;
@@ -13,17 +14,36 @@ namespace WebDongTrung.Controllers
     [Route("api/[controller]")]
     public class CartClientController : ControllerBase
     {
-         private readonly ICartClient _cartClient;
-        public CartClientController(ICartClient cartClient)
+        private readonly ICartClient _cartClient;
+        private readonly IMapper _mapper;
+        private readonly StoreDbContex _contex;
+        public CartClientController(ICartClient cartClient, IMapper mapper, StoreDbContex contex)
         {
+            _contex = contex;
             _cartClient = cartClient;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCartFromClient(CartModel cart)
+        public async Task<IActionResult> AddCartFromClient(CartModel cartModel)
         {
-            var carts = _cartClient.AddCartFromClientAsync(cart);
-            return carts != null ? Ok(carts): NotFound();
+            var cart = _mapper.Map<Cart>(cartModel);
+            cart.CreateId = "KH";
+            cart.UpdateId = "KH";
+            _contex.Carts!.AddAsync(cart);
+            await _contex.SaveChangesAsync();
+            var idCart = cart.Id;
+            foreach (var item in cartModel.CartDetailModel)
+            {
+                var cartDetail = _mapper.Map<CartDetail>(item);
+                cartDetail.IdCart = idCart;
+                cartDetail.CreateId = "KH";
+                cartDetail.UpdateId = "KH";
+                await _contex.CartDetails!.AddAsync(cartDetail);
+            }
+            await _contex.SaveChangesAsync();
+
+            return cart != null ? Ok(cart) : NotFound();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebDongTrung.Datas;
 
@@ -10,9 +11,10 @@ using WebDongTrung.Datas;
 namespace WebDongTrung.Migrations
 {
     [DbContext(typeof(StoreDbContex))]
-    partial class StoreDbContexModelSnapshot : ModelSnapshot
+    [Migration("20230227023459_addlocalhost")]
+    partial class addlocalhost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,27 +330,11 @@ namespace WebDongTrung.Migrations
                     b.Property<int?>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreateId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("varchar(12)");
-
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("UpdateId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("varchar(12)");
 
                     b.HasKey("IdCart", "IdProduct");
 
@@ -441,12 +427,6 @@ namespace WebDongTrung.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<int?>("ProductTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RealityQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SystemQuantity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateAt")

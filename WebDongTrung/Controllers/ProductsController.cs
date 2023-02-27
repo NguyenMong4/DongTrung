@@ -20,11 +20,11 @@ namespace WebDongTrung.Controllers
             _product = product;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllProduct()
+        public IActionResult GetAllProduct(string? search, string? sortBy, int page)
         {
             try
             {
-                return Ok(await _product.GetAllProductAsync());
+                return Ok(_product.GetAllProduct(search, sortBy, page));
             }
             catch
             {
@@ -55,23 +55,29 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, Product productModel){
-            try{
-                await _product.UpdateProductAsync(id,productModel);
+        public async Task<IActionResult> UpdateProduct(int id, Product productModel)
+        {
+            try
+            {
+                await _product.UpdateProductAsync(id, productModel);
                 return Ok();
             }
-            catch{
+            catch
+            {
                 return BadRequest();
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id){
-            try{
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            try
+            {
                 await _product.DeleteProductAsync(id);
                 return Ok();
             }
-            catch{
+            catch
+            {
                 return BadRequest();
             }
         }

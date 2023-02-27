@@ -23,8 +23,9 @@ namespace WebDongTrung.Repositories.CartClient
         {
             var cart = _mapper.Map<Cart>(cartModel);
             _contex.Carts!.AddAsync(cart);
+            await _contex.SaveChangesAsync();
             var idCart = cart.Id;
-            var cartDetail = _mapper.Map<CartDetail>(cartModel.ProductModel);
+            var cartDetail = _mapper.Map<CartDetail>(cartModel.CartDetailModel);
             cartDetail.IdCart = idCart;
             _contex.CartDetails!.AddAsync(cartDetail);
             await _contex.SaveChangesAsync();
