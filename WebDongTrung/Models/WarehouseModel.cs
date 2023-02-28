@@ -7,14 +7,16 @@ using WebDongTrung.Datas;
 
 namespace WebDongTrung.Models
 {
-    public class WarehouseModel :SystemProperties
+    public class WarehouseModel
     {
-        public string Id { get; set; } = null!;
+        public List<ProductWarehouse> ProductWarehouses { get; set; }
+    }
+    public class ProductWarehouse
+    {
         public int IdProduct { get; set; }
-        public List<int> IdProductLst {get;set;} = null!;
         public int ImportQuantity { get; set; }
         public int? ImportPrice { get; set; }
-        public int? RealityQuantity {get;set;}
-        public int? SystemQuantity {get;set;}
+        public int? RealityQuantity { get; set; }
+        public int? SystemQuantity { get; set; }
     }
 }

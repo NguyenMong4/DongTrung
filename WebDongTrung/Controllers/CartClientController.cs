@@ -30,8 +30,7 @@ namespace WebDongTrung.Controllers
             var cart = _mapper.Map<Cart>(cartModel);
             cart.CreateId = "KH";
             cart.UpdateId = "KH";
-            _contex.Carts!.AddAsync(cart);
-            await _contex.SaveChangesAsync();
+            await _contex.Carts!.AddAsync(cart);
             var idCart = cart.Id;
             foreach (var item in cartModel.CartDetailModel)
             {

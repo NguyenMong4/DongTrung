@@ -15,11 +15,11 @@ namespace WebDongTrung.Datas
         public int Id { get; set; }
         public int TotalPrice { get; set; }
         public int Status { get; set; }
-        public string Phone { get; set; }
-        public string Address { get; set; }
+        public string Phone { get; set; } = null!;
+        public string Address { get; set; } = null!;
         public string? Note { get; set; }
         public int Payment { get; set; }
-        public string PersonName { get; set; }
+        public string PersonName { get; set; } = null!;
         public DateTime ReceivedDate {get;set;}
     }
 }

@@ -14,7 +14,6 @@ namespace WebDongTrung.Datas
         public string Id { get; set; }
         [Key]
         public int IdProduct { get; set; }
-        public Product Products {get;set;}
         public int ImportQuantity { get; set; }
         public int? ImportPrice { get; set; }
         public int? RealityQuantity {get;set;}

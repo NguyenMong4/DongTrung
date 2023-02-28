@@ -252,9 +252,25 @@ namespace WebDongTrung.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreateId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
                     b.Property<string>("Titel")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdateId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
 
                     b.HasKey("Id");
 
@@ -459,8 +475,6 @@ namespace WebDongTrung.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductTypeId");
-
                     b.ToTable("Products");
                 });
 
@@ -504,19 +518,35 @@ namespace WebDongTrung.Migrations
                     b.Property<int>("IdProduct")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImportPrice")
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreateId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
+                    b.Property<int?>("ImportPrice")
                         .HasColumnType("int");
 
                     b.Property<int>("ImportQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("RealityQuantity")
+                    b.Property<int?>("RealityQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("SystemQuantity")
+                    b.Property<int?>("SystemQuantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdateId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
+
+                    b.HasKey("Id", "IdProduct");
 
                     b.ToTable("Warehouses");
                 });
@@ -596,15 +626,6 @@ namespace WebDongTrung.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("WebDongTrung.Datas.Product", b =>
-                {
-                    b.HasOne("WebDongTrung.Datas.ProductType", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId");
-
-                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }

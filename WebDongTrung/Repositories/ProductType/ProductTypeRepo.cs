@@ -54,6 +54,8 @@ namespace WebDongTrung.Repositories
             if (id == productType.Id)
             {
                 var productTypes = _mapper.Map<ProductType>(productType);
+                productTypes.UpdateAt = DateTime.Now;
+                productType.UpdateId = "nguyenpv";
                 _contex.ProductTypes!.Update(productTypes);
                 await _contex.SaveChangesAsync();
             }

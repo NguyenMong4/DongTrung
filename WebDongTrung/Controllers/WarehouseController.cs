@@ -43,7 +43,7 @@ namespace WebDongTrung.Controllers
         public async Task<ActionResult> AddWarehouse(WarehouseModel warehouse)
         {
             var newWarehouse = await _warehouse.AddWarehouseAsync(warehouse);
-            var wareh = _warehouse.GetWarehouseAsync(newWarehouse);
+            var wareh = await _warehouse.GetWarehouseAsync(newWarehouse);
             return wareh == null ? NotFound() : Ok(wareh);
         }
 

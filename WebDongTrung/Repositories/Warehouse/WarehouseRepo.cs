@@ -20,23 +20,35 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string> AddWarehouseAsync(WarehouseModel warehouse)
+        public async Task<string> AddWarehouseAsync(WarehouseModel warehouseModel)
         {
-            var id = "Imp" + DateTime.Now.ToString("yyyyMMddHHmm");
-            // foreach (var item in warehouse.IdProductLst)
-            // {
-            //     warehouse.IdProduct = item;
-            //     var product = _contex.Products.SingleOrDefault(p => p.Id == item);
-            //     if (product != null)
-            //     {
-            //         product.RealityQuantity += item.ImportQuantity;
-            //         item.RealityQuantity = product.RealityQuantity;
-            //         item.SystemQuantity = product.SystemQuantity;
-            //         _contex.Products.Update(product);
-            //     }
-            //     _contex.Warehouses.AddAsync(item);
-            //     await _contex.SaveChangesAsync();
-            // }
+            string id = "Imp" + DateTime.Now.ToString("yyyyMMddHHmm");
+            foreach (var item in warehouseModel.ProductWarehouses)
+            {
+                var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
+                if (product != null)
+                {
+                    Warehouse wh = new()
+                    {
+                        Id = id,
+                        CreateAt = DateTime.Now,
+                        CreateId = "nguyenpv",
+                        UpdateAt = DateTime.Now,
+                        UpdateId = "nguyenpv",
+                        IdProduct = item.IdProduct,
+                        ImportPrice = item.ImportPrice,
+                        ImportQuantity = item.ImportQuantity,
+                        RealityQuantity = product.RealityQuantity,
+                        SystemQuantity = product.SystemQuantity
+                    };
+                    product.RealityQuantity += item.ImportQuantity;
+                    product.SystemQuantity += item.ImportQuantity;
+                    _contex.Products!.Update(product);
+                    _contex.Warehouses!.Add(wh);
+                    await _contex.SaveChangesAsync();
+                }
+            }
+
             return id;
         }
 
@@ -56,10 +68,10 @@ namespace WebDongTrung.Repositories
             return _mapper.Map<IEnumerable<Warehouse>>(warehouse);
         }
 
-        public async Task<IEnumerable<Warehouse>> GetWarehouseAsync(string id)
+        public async Task<List<Warehouse>> GetWarehouseAsync(string id)
         {
-            var warehouse = await _contex.Warehouses!.Select(w=>w.Id ==id).ToListAsync();
-            return _mapper.Map<IEnumerable<Warehouse>>(warehouse);
+            var warehouse = await _contex.Warehouses!.Where(w => w.Id.Contains(id)).ToListAsync();
+            return _mapper.Map<List<Warehouse>>(warehouse);
         }
 
         public async Task UpdateWarehouseAsync(string id, Warehouse warehouse)

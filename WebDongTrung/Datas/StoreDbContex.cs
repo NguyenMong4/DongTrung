@@ -18,6 +18,7 @@ namespace WebDongTrung.Datas
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CartDetail>().HasKey(p => new { p.IdCart, p.IdProduct });
+            modelBuilder.Entity<Warehouse>().HasKey(p=>new{p.Id,p.IdProduct});
             base.OnModelCreating(modelBuilder);
         }
     }
