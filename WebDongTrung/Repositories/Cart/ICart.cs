@@ -5,7 +5,7 @@ namespace WebDongTrung.Repositories
 {
     public interface ICart
     {
-         public Task<IEnumerable<Cart>> GetAllCartAsync();
+         public List<CartModel> GetAllCart(string? search, int page);
          public Task<Cart?> GetCartAsync(int id);
          public Task<int> AddCartAsync(Cart cart);
          public Task UpDateCartAsync(int id, CartModel cartModel);

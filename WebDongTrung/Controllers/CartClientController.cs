@@ -31,6 +31,7 @@ namespace WebDongTrung.Controllers
             cart.CreateId = "KH";
             cart.UpdateId = "KH";
             await _contex.Carts!.AddAsync(cart);
+            await _contex.SaveChangesAsync();
             var idCart = cart.Id;
             foreach (var item in cartModel.CartDetailModel)
             {
@@ -39,8 +40,8 @@ namespace WebDongTrung.Controllers
                 cartDetail.CreateId = "KH";
                 cartDetail.UpdateId = "KH";
                 await _contex.CartDetails!.AddAsync(cartDetail);
+                await _contex.SaveChangesAsync();
             }
-            await _contex.SaveChangesAsync();
 
             return cart != null ? Ok(cart) : NotFound();
         }

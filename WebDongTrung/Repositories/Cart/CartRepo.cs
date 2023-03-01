@@ -9,6 +9,7 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
+        public static int PageSize {get;set;} = 1;
 
         public CartRepo(StoreDbContex contex, IMapper mapper)
         {
@@ -33,10 +34,27 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<IEnumerable<Cart>> GetAllCartAsync()
+        public List<CartModel> GetAllCart(string? search, int page = 1)
         {
-            var cart = await _contex.Carts!.ToListAsync();
-            return _mapper.Map<IEnumerable<Cart>>(cart);
+            var allCart = _contex.Carts!.AsQueryable();
+            //searching
+            if (!string.IsNullOrEmpty(search))
+            {
+                allCart = allCart.Where(p => p.Phone!.Contains(search));
+            }
+            allCart = allCart.OrderByDescending(p => p.CreateAt);
+            allCart = allCart.Skip((page - 1)* PageSize).Take(PageSize);
+
+            var result = allCart.Select(p => new CartModel
+            {
+                Id = p.Id,
+                TotalPrice = p.TotalPrice,
+                Status = p.Status,
+                Address = p.Address,
+                Payment = p.Payment,
+                PersonName = p.PersonName,
+            });
+            return result.ToList();
         }
 
         public async Task<Cart?> GetCartAsync(int id)

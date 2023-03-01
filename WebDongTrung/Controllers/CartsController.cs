@@ -17,11 +17,11 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCart()
+        public IActionResult GetAllCarts(string? search, int page)
         {
-            try
+           try
             {
-                return Ok(await _cart.GetAllCartAsync());
+                return Ok(_cart.GetAllCart(search, page));
             }
             catch
             {
