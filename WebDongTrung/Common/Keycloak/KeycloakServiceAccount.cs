@@ -31,7 +31,7 @@ namespace WebDongTrung.Common.Keycloak
                 if (authToken == null || force || IsExpired(authToken))
                 {
                     FormUrlEncodedContent body;
-                    if (string.IsNullOrEmpty(authToken?.RefreshToken) || force)
+                    if (string.IsNullOrEmpty(authToken?.refresh_token) || force)
                     {
                         var newTokenRequest = new Dictionary<string, string>(){
                             {"grant_type","client_credentials"},
@@ -46,7 +46,7 @@ namespace WebDongTrung.Common.Keycloak
                             {"client_id", client_id},
                             {"client_secret", client_secret },
                             {"grant_type", "refresh_token"},
-                            {"refresh_token", authToken.RefreshToken}
+                            {"refresh_token", authToken.refresh_token}
                         };
                         body = new FormUrlEncodedContent(refreshTokenRequest);
                     }
@@ -78,7 +78,7 @@ namespace WebDongTrung.Common.Keycloak
         {
             if (authToken != null)
             {
-                return string.Join(" ", authToken.TokenType, authToken.AccessToken);
+                return string.Join(" ", authToken.token_type, authToken.access_token);
             }
             return null;
         }

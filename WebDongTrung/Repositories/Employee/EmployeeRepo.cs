@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -19,16 +21,17 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string?> AddEmployeeAsync(Employee employee)
+        public async Task<string?> AddEmployeeAsync(EmployeeModel employee)
         {
-            _contex.Employees.AddAsync(employee);
+            var emp = _mapper.Map<Employee>(employee);
+            await _contex.Employees!.AddAsync(emp);
             await _contex.SaveChangesAsync();
             return employee.Id;
         }
 
-        public async Task DeleteEmployeeAsync(string id)
+        public async Task DeleteEmployeeAsync(string username)
         {
-            var employee = _contex.Employees!.SingleOrDefault(e => e.Id == id);
+            var employee = _contex.Employees!.SingleOrDefault(e => e.UserName == username);
             if (employee != null)
             {
                 _contex.Employees!.Remove(employee);
@@ -47,11 +50,13 @@ namespace WebDongTrung.Repositories
             return await _contex.Employees!.FindAsync(id);
         }
 
-        public async Task UpdateEmployeeAsync(string id, Employee employee)
+        public async Task UpdateEmployeeAsync(string username, EmployeeModel employee)
         {
-            if(id.Equals(employee.Id)){
-                 _contex.Employees!.Update(employee);
-                 await _contex.SaveChangesAsync();
+            if (username.Equals(employee.UserName))
+            {
+                var emp = _mapper.Map<Employee>(employee);
+                _contex.Employees!.Update(emp);
+                await _contex.SaveChangesAsync();
             }
         }
     }

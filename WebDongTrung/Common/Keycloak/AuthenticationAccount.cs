@@ -14,11 +14,11 @@ namespace WebDongTrung.Common.Keycloak
         {
             try
             {
-                if (authToken == null || string.IsNullOrEmpty(authToken?.AccessToken)) 
+                if (authToken == null || string.IsNullOrEmpty(authToken?.access_token)) 
                 {
                     return true;
                 }
-                var jwtToken = new JwtSecurityToken(authToken.AccessToken);
+                var jwtToken = new JwtSecurityToken(authToken.access_token);
                 if (jwtToken == null)
                 {
                     return true;

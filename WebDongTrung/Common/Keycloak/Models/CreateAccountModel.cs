@@ -13,7 +13,10 @@ namespace WebDongTrung.Common.Keycloak.Models
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-         [Required(ErrorMessage = "Group is required")]
+        [Required(ErrorMessage = "Group is required")]
         public List<string> groups { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        
     }
 }
