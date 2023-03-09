@@ -22,12 +22,12 @@ namespace WebDongTrung.Repositories.CartClient
         public async Task<int> AddCartFromClientAsync(CartModel cartModel)
         {
             var cart = _mapper.Map<Cart>(cartModel);
-            _contex.Carts!.AddAsync(cart);
+            await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
             var idCart = cart.Id;
             var cartDetail = _mapper.Map<CartDetail>(cartModel.CartDetailModel);
             cartDetail.IdCart = idCart;
-            _contex.CartDetails!.AddAsync(cartDetail);
+            await _contex.CartDetails!.AddAsync(cartDetail);
             await _contex.SaveChangesAsync();
             return cartDetail.IdCart;
         }

@@ -11,9 +11,11 @@ namespace WebDongTrung.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ICart _cart;
-        public CartsController(ICart cart)
+        private readonly ICartDetail _cartDetail;
+        public CartsController(ICart cart, ICartDetail cartDetail)
         {
             _cart = cart;
+            _cartDetail = cartDetail;
         }
 
         [HttpGet]
@@ -30,14 +32,14 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCart(int id)
+        public async Task<IActionResult> GetCartDetail(int id)
         {
-            var cart = await _cart.GetCartAsync(id);
+            var cart = await _cartDetail.GetCartDetailAsync(id);
             return cart != null ? Ok(cart) : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCart(  Cart cart)
+        public async Task<IActionResult> AddCart(Cart cart)
         {
             try
             {

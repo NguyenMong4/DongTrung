@@ -71,7 +71,7 @@ namespace WebDongTrung.Repositories
                 _contex.Carts!.Update(cart);
                 foreach (var item in cartModel.CartDetailModel)
                 {
-                    var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
+                    var product = _contex.Products!.SingleOrDefault(p => p.Id == item.Id);
                     if (product != null)
                     {
                         //trạng thái : đang giao hàng
