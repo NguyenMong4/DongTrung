@@ -7,13 +7,10 @@ using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class Blog : SystemProperties
+    public class BlogMaster
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Titel { get; set; } = null!;
-        public string Content { get; set; } = null!;
-        public int Type{get;set;}
+        public string Name { get; set; } = null!;
     }
 }

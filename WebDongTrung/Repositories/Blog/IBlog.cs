@@ -8,10 +8,11 @@ namespace WebDongTrung.Repositories
 {
     public interface IBlog
     {
-        public Task<IEnumerable<Blog>> GetAllBlogAsync();
+        public Task<IEnumerable<Blog>> GetAllBlogAsync(int type);
         public Task<Blog> GetBlogAsync(int id);
         public Task<int> AddBlogAsync(Blog blog);
         public Task UpdateBlogAsync(int id, Blog blog);
         public Task DeleteBlogAsync(int id);
+        public List<BlogMaster> GetNameMasters();
     }
 }

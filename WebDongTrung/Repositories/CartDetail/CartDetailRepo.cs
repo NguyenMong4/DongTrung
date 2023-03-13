@@ -38,8 +38,8 @@ namespace WebDongTrung.Repositories
                 Price = c.c.Price,
                 Photo = c.p.Photo,
                 Quantity = c.c.Quantity
-            }).Where(c=>c.IdCart == id).ToList();
-            return cartdetail;
+            }).Where(c=>c.IdCart == id);
+            return cartdetail.ToList();
         }
 
         public Task UpdateCartDetailAsync(CartDetail cartDetail)

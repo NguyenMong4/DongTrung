@@ -39,7 +39,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCart(Cart cart)
+        public async Task<IActionResult> AddCart(CartModel cart)
         {
             try
             {

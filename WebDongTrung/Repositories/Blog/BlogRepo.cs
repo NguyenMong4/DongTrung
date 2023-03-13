@@ -22,6 +22,10 @@ namespace WebDongTrung.Repositories
         public async Task<int> AddBlogAsync(Blog blog)
         {
             var newBlog = _mapper.Map<Blog>(blog);
+            newBlog.CreateAt = DateTime.Now;
+            newBlog.CreateId = "admin";
+            newBlog.UpdateId = "admin";
+            newBlog.UpdateAt = DateTime.Now;
             _context.Blogs!.Add(newBlog);
             await _context.SaveChangesAsync();
             return newBlog.Id;
@@ -37,9 +41,9 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<IEnumerable<Blog>> GetAllBlogAsync()
+        public async Task<IEnumerable<Blog>> GetAllBlogAsync(int type)
         {
-            var blogs = await _context.Blogs!.ToListAsync();
+            var blogs = await _context.Blogs!.Where(blog=>blog.Type == type).ToListAsync();
             return _mapper.Map<IEnumerable<Blog>>(blogs);
         }
 
@@ -54,9 +58,14 @@ namespace WebDongTrung.Repositories
             if (id == blog.Id)
             {
                 var blogs = _mapper.Map<Blog>(blog);
+                blogs.UpdateAt = DateTime.Now;
+                blogs.UpdateId = "admin";
                 _context.Blogs!.Update(blogs);
                 await _context.SaveChangesAsync();
             }
+        }
+        public List<BlogMaster> GetNameMasters(){
+            return _context.BlogMasters!.ToList();
         }
     }
 }

@@ -16,12 +16,24 @@ namespace WebDongTrung.Repositories
             _contex = contex;
             _mapper = mapper;
         }
-        public async Task<int> AddCartAsync(Cart cart)
+        public async Task<int> AddCartAsync(CartModel cartModel)
         {
-            _contex.Carts.AddAsync(cart);
+             var cart = _mapper.Map<Cart>(cartModel);
+            cart.CreateId = "admin";
+            cart.UpdateId = "admin";
+            await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
+            var idCart = cart.Id;
+            foreach (var item in cartModel.CartDetailModel)
+            {
+                var cartDetail = _mapper.Map<CartDetail>(item);
+                cartDetail.IdCart = idCart;
+                cartDetail.CreateId = "admin";
+                cartDetail.UpdateId = "admin";
+                await _contex.CartDetails!.AddAsync(cartDetail);
+                await _contex.SaveChangesAsync();
+            }
             return cart.Id;
-
         }
 
         public async Task DeleteCartAsync(int id)
@@ -29,7 +41,7 @@ namespace WebDongTrung.Repositories
             var cart = _contex.Carts!.SingleOrDefault(c => c.Id == id);
             if (cart != null)
             {
-                _contex.Carts.Remove(cart);
+                _contex.Carts!.Remove(cart);
                 await _contex.SaveChangesAsync();
             }
         }

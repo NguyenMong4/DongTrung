@@ -18,12 +18,42 @@ namespace WebDongTrung.Controllers
         {
             _blog = blog;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllEmployee()
+
+        // Type = 1 : blog
+        // = 2 : about
+        // = 3 : chuong trinh khuyen mai
+        [HttpGet("Blogs")]
+        public async Task<IActionResult> GetAllBlogs()
         {
             try
             {
-                return Ok(await _blog.GetAllBlogAsync());
+                return Ok(await _blog.GetAllBlogAsync(1));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("About")]
+        public async Task<IActionResult> GetAbout()
+        {
+            try
+            {
+                return Ok(await _blog.GetAllBlogAsync(2));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("Discount")]
+        public async Task<IActionResult> GetAllDiscount()
+        {
+            try
+            {
+                return Ok(await _blog.GetAllBlogAsync(3));
             }
             catch
             {
@@ -39,7 +69,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddEmployee(Blog blog)
+        public async Task<ActionResult> AddBlog(Blog blog)
         {
             try
             {
@@ -54,7 +84,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEmployee(int id, Blog blog)
+        public async Task<IActionResult> UpdateBlog(int id, Blog blog)
         {
             try
             {
@@ -79,6 +109,12 @@ namespace WebDongTrung.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("ListType")]
+        public List<BlogMaster> GetNameBlogType()
+        {
+            return _blog.GetNameMasters();
         }
     }
 }

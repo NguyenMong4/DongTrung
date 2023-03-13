@@ -22,6 +22,10 @@ namespace WebDongTrung.Repositories
         public async Task<int> AddProductTypeAsync(ProductType productType)
         {
              var newProductType = _mapper.Map<ProductType>(productType);
+             newProductType.CreateAt = DateTime.Now;
+             newProductType.CreateId = "admin";
+             newProductType.UpdateAt = DateTime.Now;
+             newProductType.UpdateId = "admin";
             _contex.ProductTypes!.Add(newProductType);
             await _contex.SaveChangesAsync();
             return newProductType.Id;
