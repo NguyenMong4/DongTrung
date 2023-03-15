@@ -20,11 +20,11 @@ namespace WebDongTrung.Controllers
             _product = product;
         }
         [HttpGet]
-        public IActionResult GetAllProduct(string? search, string? sortBy, int page)
+        public IActionResult GetAllProduct(string? search, string? sortBy, int? productType, int page)
         {
             try
             {
-                return Ok(_product.GetAllProduct(search, sortBy, page));
+                return Ok(_product.GetAllProduct(search, sortBy,productType, page));
             }
             catch
             {

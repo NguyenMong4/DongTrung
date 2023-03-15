@@ -21,7 +21,7 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public List<ProductModel> GetAllProduct(string search, string sortBy, int page = 1)
+        public List<ProductModel> GetAllProduct(string? search, string? sortBy,int? productType, int page = 1)
         {
             var allProduct = _contex.Products!.AsQueryable();
             //searching
@@ -29,7 +29,14 @@ namespace WebDongTrung.Repositories
             {
                 allProduct = allProduct.Where(p => p.Name!.Contains(search));
             }
+
+            if (productType != null)
+            {
+                allProduct = allProduct.Where(p => p.ProductTypeId == productType);
+            }
+
             allProduct = allProduct.OrderBy(p => p.Name);
+
 
             //sorting
             if (!string.IsNullOrEmpty(sortBy))
