@@ -7,8 +7,8 @@ namespace WebDongTrung.Models
 {
     public class UsersModel
     {
-        public string id { get; set; }
-        public string username { get; set; }
+        public string id { get; set; } = null!;
+        public string username { get; set; } = null!;
         public long createdTimestamp { get; set; }
         public DateTimeOffset CreateAt { get; set; }
     }

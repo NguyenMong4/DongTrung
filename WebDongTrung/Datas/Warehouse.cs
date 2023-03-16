@@ -11,7 +11,7 @@ namespace WebDongTrung.Datas
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         [Key]
         public int IdProduct { get; set; }
         public int ImportQuantity { get; set; }
