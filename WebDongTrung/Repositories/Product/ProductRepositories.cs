@@ -13,7 +13,7 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
-        public static int PageSize {get;set;} = 1;
+        public static int PageSize { get; set; } = 9;
 
         public ProductRepositories(StoreDbContex context, IMapper mapper)
         {
@@ -21,7 +21,7 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public List<ProductModel> GetAllProduct(string? search, string? sortBy,int? productType, int page = 1)
+        public List<ProductModel> GetAllProduct(string? search, string? sortBy, int? productType, int page = 1)
         {
             var allProduct = _contex.Products!.AsQueryable();
             //searching
@@ -54,7 +54,7 @@ namespace WebDongTrung.Repositories
 
             //page
 
-            allProduct = allProduct.Skip((page - 1)* PageSize).Take(PageSize);
+            allProduct = allProduct.Skip((page - 1) * PageSize).Take(PageSize);
 
             var result = allProduct.Select(p => new ProductModel
             {
@@ -105,6 +105,17 @@ namespace WebDongTrung.Repositories
                 _contex.Products!.Update(product);
                 await _contex.SaveChangesAsync();
             }
+        }
+
+        public IEnumerable<ProductModel> GetProductsDiscount()
+        {
+            return _contex.Products!.Where(p => p.Discount != 0).Select(p=> new ProductModel{
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Photo = p.Photo,
+                Discount = p.Discount
+            });
         }
     }
 }

@@ -31,6 +31,10 @@ namespace WebDongTrung.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("Discount")]
+        public IActionResult GetAllProductDiscount(){
+            return Ok(_product.GetProductsDiscount());
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
