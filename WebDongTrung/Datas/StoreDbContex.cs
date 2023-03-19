@@ -16,6 +16,7 @@ namespace WebDongTrung.Datas
         public DbSet<ProductType>? ProductTypes { get; set; }
         public DbSet<Warehouse>? Warehouses { get; set; }
         public DbSet<BlogMaster>? BlogMasters { get; set; }
+        public DbSet<Discount>? Discounts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CartDetail>().HasKey(p => new { p.IdCart, p.IdProduct });

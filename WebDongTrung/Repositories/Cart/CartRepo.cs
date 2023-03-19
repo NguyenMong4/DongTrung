@@ -9,7 +9,7 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
-        public static int PageSize {get;set;} = 1;
+        public static int PageSize { get; set; } = 1;
 
         public CartRepo(StoreDbContex contex, IMapper mapper)
         {
@@ -18,7 +18,7 @@ namespace WebDongTrung.Repositories
         }
         public async Task<int> AddCartAsync(CartModel cartModel)
         {
-             var cart = _mapper.Map<Cart>(cartModel);
+            var cart = _mapper.Map<Cart>(cartModel);
             cart.CreateId = "admin";
             cart.UpdateId = "admin";
             await _contex.Carts!.AddAsync(cart);
@@ -55,7 +55,7 @@ namespace WebDongTrung.Repositories
                 allCart = allCart.Where(p => p.Phone!.Contains(search));
             }
             allCart = allCart.OrderByDescending(p => p.CreateAt);
-            allCart = allCart.Skip((page - 1)* PageSize).Take(PageSize);
+            allCart = allCart.Skip((page - 1) * PageSize).Take(PageSize);
 
             var result = allCart.Select(p => new CartModel
             {
@@ -86,8 +86,12 @@ namespace WebDongTrung.Repositories
                     var product = _contex.Products!.SingleOrDefault(p => p.Id == item.Id);
                     if (product != null)
                     {
-                        //trạng thái : đang giao hàng
-                        if (cart.Status == 1)
+                        if (product.Discount != 0)
+                        {
+                            item.Quantity += item.Quantity / product.Discount;
+                        }
+
+                        if (cart.Status == 1) //trạng thái : đang giao hàng
                         {
                             product.RealityQuantity -= item.Quantity;
                         }
@@ -95,7 +99,7 @@ namespace WebDongTrung.Repositories
                         {
                             product.SystemQuantity -= item.Quantity;
                         }
-                        else if(cart.Status == 3) //trạng thái : Hoàn đơn
+                        else if (cart.Status == 3) //trạng thái : Hoàn đơn
                         {
                             product.RealityQuantity += item.Quantity;
                         }
