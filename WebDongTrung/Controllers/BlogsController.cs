@@ -61,6 +61,19 @@ namespace WebDongTrung.Controllers
             }
         }
 
+        [HttpGet("UserManual")]
+        public async Task<IActionResult> GetAllUserManual()
+        {
+            try
+            {
+                return Ok(await _blog.GetAllBlogAsync(4));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBlog(int id)
         {

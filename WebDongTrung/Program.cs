@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(option => option.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContex>().AddDefaultTokenProviders();
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContex>().AddDefaultTokenProviders();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnect");
 builder.Services.AddDbContext<StoreDbContex>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -29,6 +29,7 @@ builder.Services.AddScoped<IEmployees, EmployeeRepo>();
 builder.Services.AddScoped<ICart, CartRepo>();
 builder.Services.AddScoped<ICartClient, CartClientRepo>();
 builder.Services.AddScoped<IWarehouse, WarehouseRepo>();
+builder.Services.AddScoped<IBlog, BlogRepo>();
 
 builder.Services.AddAuthentication(option =>
 {
