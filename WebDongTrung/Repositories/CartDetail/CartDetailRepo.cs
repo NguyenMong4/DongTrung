@@ -32,7 +32,7 @@ namespace WebDongTrung.Repositories
         {
             var cartdetail =  _contex.CartDetails!.Join(_contex.Products!,c=>c.IdProduct, p => p.Id , (c,p)=> new {c,p}
             ).Select(c=> new CartDetailModel {
-                Id = c.p.Id,
+                IdProduct = c.p.Id,
                 IdCart = c.c.IdCart,
                 Name = c.p.Name,
                 Price = c.c.Price,

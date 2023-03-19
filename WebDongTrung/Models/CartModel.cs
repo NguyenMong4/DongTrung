@@ -6,12 +6,13 @@ using WebDongTrung.Datas;
 
 namespace WebDongTrung.Models
 {
-    public class CartModel : SystemProperties
+    public class CartModel
     {
         public int Id { get; set; }
         public int TotalPrice { get; set; }
         public int Status { get; set; }
         public string Phone { get; set; } = null!;
+        public string Email { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string? Note { get; set; }
         public int Payment { get; set; }

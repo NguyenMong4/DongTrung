@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebDongTrung.Datas
 {
-    public class StoreDbContex : IdentityDbContext<ApplicationUser>
+    public class StoreDbContex : DbContext
     {
         public StoreDbContex(DbContextOptions<StoreDbContex> options) : base(options) { }
 
