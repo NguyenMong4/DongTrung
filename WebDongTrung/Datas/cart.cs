@@ -21,5 +21,6 @@ namespace WebDongTrung.Datas
         public int Payment { get; set; }
         public string PersonName { get; set; } = null!;
         public DateTime ReceivedDate {get;set;}
+        public string Email {get;set;} = null!;
     }
 }
