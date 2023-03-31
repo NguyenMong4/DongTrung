@@ -30,6 +30,7 @@ builder.Services.AddScoped<ICart, CartRepo>();
 builder.Services.AddScoped<ICartClient, CartClientRepo>();
 builder.Services.AddScoped<IWarehouse, WarehouseRepo>();
 builder.Services.AddScoped<IBlog, BlogRepo>();
+builder.Services.AddScoped<ICartDetail, CartDetailRepo>();
 
 builder.Services.AddAuthentication(option =>
 {

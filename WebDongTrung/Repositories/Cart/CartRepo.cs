@@ -9,7 +9,7 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
-        public static int PageSize { get; set; } = 1;
+        public static int PageSize { get; set; } = 10;
 
         public CartRepo(StoreDbContex contex, IMapper mapper)
         {
