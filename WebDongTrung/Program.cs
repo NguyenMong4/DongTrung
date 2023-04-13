@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
 using WebDongTrung.Repositories;
 using WebDongTrung.Repositories.CartClient;
+using WebDongTrung.Repositories.Advertisment;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<ICartClient, CartClientRepo>();
 builder.Services.AddScoped<IWarehouse, WarehouseRepo>();
 builder.Services.AddScoped<IBlog, BlogRepo>();
 builder.Services.AddScoped<ICartDetail, CartDetailRepo>();
+builder.Services.AddScoped<IAdvertisment, AdvertisementRepo>();
 
 builder.Services.AddAuthentication(option =>
 {

@@ -17,7 +17,7 @@ namespace WebDongTrung.Models
         public string? Email { get; set; }
         [MaxLength(200)]
         public string? Address { get; set; }
-        public string? Group { get; set; }
+        public string? FullName { get; set; }
         public string? PassWord {get;set;}
     }
 }

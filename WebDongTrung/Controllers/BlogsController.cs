@@ -123,11 +123,5 @@ namespace WebDongTrung.Controllers
                 return BadRequest();
             }
         }
-
-        [HttpGet("ListType")]
-        public List<BlogMaster> GetNameBlogType()
-        {
-            return _blog.GetNameMasters();
-        }
     }
 }

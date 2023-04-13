@@ -28,7 +28,7 @@ namespace WebDongTrung.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<CartDetailModel>> GetCartDetailAsync(int id)
+        public Task<List<CartDetailModel>> GetCartDetailAsync(int id)
         {
             var cartdetail =  _contex.CartDetails!.Join(_contex.Products!,c=>c.IdProduct, p => p.Id , (c,p)=> new {c,p}
             ).Select(c=> new CartDetailModel {
@@ -39,7 +39,7 @@ namespace WebDongTrung.Repositories
                 Photo = c.p.Photo,
                 Quantity = c.c.Quantity
             }).Where(c=>c.IdCart == id);
-            return cartdetail.ToList();
+            return Task.FromResult(cartdetail.ToList());
         }
 
         public Task UpdateCartDetailAsync(CartDetail cartDetail)

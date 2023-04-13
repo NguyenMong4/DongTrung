@@ -11,8 +11,8 @@ namespace WebDongTrung.Datas
     public class Employee : SystemProperties
     {
         [Key]
-        [MaxLength(12)]
-        public string? Id { get; set; }
+        [MaxLength(100)]
+        public string Id { get; set; } = null!;
         public string? UserName { get; set; }
         [MaxLength(10)]
         public string? Phone { get; set; }
@@ -20,6 +20,6 @@ namespace WebDongTrung.Datas
         public string? Email { get; set; }
         [MaxLength(200)]
         public string? Address { get; set; }
-        public string? Group { get; set; }
+        public string? FullName { get; set; }
     }
 }

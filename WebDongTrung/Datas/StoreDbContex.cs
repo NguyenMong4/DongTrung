@@ -15,20 +15,14 @@ namespace WebDongTrung.Datas
         public DbSet<Employee>? Employees { get; set; }
         public DbSet<ProductType>? ProductTypes { get; set; }
         public DbSet<Warehouse>? Warehouses { get; set; }
-        public DbSet<BlogMaster>? BlogMasters { get; set; }
+        public DbSet<MasterName>? MasterNames { get; set; }
         public DbSet<Discount>? Discounts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CartDetail>().HasKey(p => new { p.IdCart, p.IdProduct });
-            modelBuilder.Entity<Warehouse>().HasKey(p=>new{p.Id,p.IdProduct});
+            modelBuilder.Entity<Warehouse>().HasKey(p => new { p.Id, p.IdProduct });
+            modelBuilder.Entity<MasterName>().HasKey(p => new { p.Code, p.Cd });
             base.OnModelCreating(modelBuilder);
-            // Bỏ tiền tố AspNet của các bảng: mặc định
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes ()) {
-                var tableName = entityType.GetTableName ();
-                if (tableName!.StartsWith ("AspNet")) {
-                    entityType.SetTableName (tableName.Substring (6));
-                }
-            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WebDongTrung.Common.Keycloak
         public string client_id;
         public string client_secret;
         public AuthenticationResponse? authToken;
-        private HttpClient client = new();
+        private readonly HttpClient client = new();
         public KeycloakServiceAccount(string url, string realms, string client_id, string client_secret)
         {
             TokenUrl = url + $"/realms/{realms}/protocol/openid-connect/token";

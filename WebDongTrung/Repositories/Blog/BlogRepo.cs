@@ -49,7 +49,7 @@ namespace WebDongTrung.Repositories
 
         public async Task<Blog> GetBlogAsync(int id)
         {
-            var blog = await _context.Products!.FindAsync(id);
+            var blog = await _context.Blogs!.FindAsync(id);
             return _mapper.Map<Blog>(blog);
         }
 
@@ -63,9 +63,6 @@ namespace WebDongTrung.Repositories
                 _context.Blogs!.Update(blogs);
                 await _context.SaveChangesAsync();
             }
-        }
-        public List<BlogMaster> GetNameMasters(){
-            return _context.BlogMasters!.ToList();
         }
     }
 }

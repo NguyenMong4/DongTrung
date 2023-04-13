@@ -9,10 +9,10 @@ namespace WebDongTrung.Datas
     public abstract class SystemProperties
     {
         [MaxLength(12)]
-        public string CreateId { get; set; } = null!;
-        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
+        public string? CreateId { get; set; }
+        public DateTime? CreateAt { get; set; }
         [MaxLength(12)]
-        public string UpdateId { get; set; } = null!;
-        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
+        public string? UpdateId { get; set; }
+        public DateTime? UpdateAt { get; set; }
     }
 }

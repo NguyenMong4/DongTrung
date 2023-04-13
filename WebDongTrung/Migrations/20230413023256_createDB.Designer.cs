@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebDongTrung.Datas;
 
@@ -10,9 +11,10 @@ using WebDongTrung.Datas;
 namespace WebDongTrung.Migrations
 {
     [DbContext(typeof(StoreDbContex))]
-    partial class StoreDbContexModelSnapshot : ModelSnapshot
+    [Migration("20230413023256_createDB")]
+    partial class createDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,8 +222,8 @@ namespace WebDongTrung.Migrations
             modelBuilder.Entity("WebDongTrung.Datas.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(200)
@@ -238,7 +240,7 @@ namespace WebDongTrung.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("Group")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Phone")
@@ -270,7 +272,7 @@ namespace WebDongTrung.Migrations
                     b.Property<string>("Cd")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime(6)");

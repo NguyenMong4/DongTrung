@@ -60,8 +60,8 @@ namespace WebDongTrung.Controllers
                 Content = new StringContent(JsonSerializer.Serialize(new
                 {
                     username = employee.UserName,
-                    groups = new string[] { employee.Group },
                     email = employee.Email,
+                    enabled = true,
                     credentials = new List<object>{
                     new {
                         type = "password",
@@ -74,13 +74,18 @@ namespace WebDongTrung.Controllers
             var respone = await client.SendAsync(requestMessage);
             await respone.Content.ReadAsStringAsync();
 
-            //create in database
-            var newEmp = await _employee.AddEmployeeAsync(employee);
-            var emp = await _employee.GetEmployeeAsync(newEmp!);
-
-            if (respone.IsSuccessStatusCode && emp != null)
+            var user = await client.GetAsync($"{url}/admin/realms/master/users?username={employee.UserName}");
+            var userM = JsonSerializer.Deserialize<List<UsersModel>>(await user.Content.ReadAsStringAsync());
+            if (userM?.Count > 0)
             {
-                return Ok(emp);
+                employee.Id = userM[0].id;
+                //create in database
+                await _employee.AddEmployeeAsync(employee);
+            }
+
+            if (respone.IsSuccessStatusCode)
+            {
+                return Ok();
             }
             else
             {
@@ -135,10 +140,8 @@ namespace WebDongTrung.Controllers
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
             var content = new StringContent(JsonSerializer.Serialize(new UserUpdateDto
             {
-                Email = user.Email,
-                Groups = user.Group
+                Email = user.Email
             }), Encoding.UTF8, "application/json");
-
             var respone = await client.PutAsync($"{url}/admin/realms/master/users?username={username}", content);
             await _employee.UpdateEmployeeAsync(username, user);
 

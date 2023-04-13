@@ -12,8 +12,8 @@ namespace WebDongTrung.Datas
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Titel { get; set; } = null!;
-        public string Content { get; set; } = null!;
-        public int Type{get;set;}
+        public string? Titel { get; set; }
+        public string? Content { get; set; }
+        public int? Type{get;set;}
     }
 }
