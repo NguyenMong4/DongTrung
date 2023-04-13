@@ -1,3 +1,4 @@
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,17 @@ namespace WebDongTrung.Repositories
     {
         private readonly StoreDbContex _contex;
         private readonly IMapper _mapper;
+        private readonly IHostEnvironment _env;
         public static int PageSize { get; set; } = 9;
 
-        public ProductRepositories(StoreDbContex context, IMapper mapper)
+        public ProductRepositories(StoreDbContex context, IMapper mapper, IHostEnvironment env)
         {
             _contex = context;
             _mapper = mapper;
+            _env = env;
         }
 
-        public List<ProductModel> GetAllProduct(string? search, string? sortBy, int? productType, int page = 1)
+        public List<ProductModel> GetAllProduct(string? search, string? sortBy, int? productType, int? page = 1)
         {
             var allProduct = _contex.Products!.AsQueryable();
             //searching
@@ -36,7 +39,6 @@ namespace WebDongTrung.Repositories
             }
 
             allProduct = allProduct.OrderBy(p => p.Name);
-
 
             //sorting
             if (!string.IsNullOrEmpty(sortBy))
@@ -53,8 +55,8 @@ namespace WebDongTrung.Repositories
             }
 
             //page
-
-            allProduct = allProduct.Skip((page - 1) * PageSize).Take(PageSize);
+            if(page != null)
+                allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
 
             var result = allProduct.Select(p => new ProductModel
             {
@@ -70,9 +72,26 @@ namespace WebDongTrung.Repositories
 
         public async Task<int> AddProductAsync(Product product)
         {
-            _contex.Products!.Add(product);
-            await _contex.SaveChangesAsync();
-            return product.Id;
+            try
+            {
+                if (product.PhotoFile != null)
+                {
+                    var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
+                    Directory.CreateDirectory(directory);
+                    var filePath = Path.Combine(directory, product.PhotoFile.FileName);
+                    product.Photo = $"wwwroot/images/{product.PhotoFile.FileName}";
+                    using FileStream fs = new(filePath, FileMode.Create);
+                    product.PhotoFile.CopyTo(fs);
+                    fs.Close();
+                }
+                _contex.Products!.Add(product);
+                await _contex.SaveChangesAsync();
+                return product.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
         public async Task DeleteProductAsync(int id)
@@ -109,7 +128,8 @@ namespace WebDongTrung.Repositories
 
         public IEnumerable<ProductModel> GetProductsDiscount()
         {
-            return _contex.Products!.Where(p => p.Discount != 0).Select(p=> new ProductModel{
+            return _contex.Products!.Where(p => p.Discount != 0).Select(p => new ProductModel
+            {
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,

@@ -20,7 +20,7 @@ namespace WebDongTrung.Repositories
         {
             var cart = _mapper.Map<Cart>(cartModel);
             cart.CreateId = "admin";
-            cart.UpdateId = "admin";
+            cart.CreateAt = DateTime.Now;
             await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
             var idCart = cart.Id;
@@ -29,7 +29,7 @@ namespace WebDongTrung.Repositories
                 var cartDetail = _mapper.Map<CartDetail>(item);
                 cartDetail.IdCart = idCart;
                 cartDetail.CreateId = "admin";
-                cartDetail.UpdateId = "admin";
+                cartDetail.CreateAt = DateTime.Now;
                 await _contex.CartDetails!.AddAsync(cartDetail);
                 await _contex.SaveChangesAsync();
             }

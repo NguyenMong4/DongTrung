@@ -20,7 +20,7 @@ namespace WebDongTrung.Controllers
             _product = product;
         }
         [HttpGet]
-        public IActionResult GetAllProduct(string? search, string? sortBy, int? productType, int page)
+        public IActionResult GetAllProduct(string? search, string? sortBy, int? productType, int? page)
         {
             try
             {
@@ -44,10 +44,13 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProduct(Product productModel)
+        [Consumes("multipart/form-data")]
+        // enctype='multipart/form-data'
+        public async Task<ActionResult> AddProduct([FromForm]Product productModel)
         {
             try
             {
+                // productModel.PhotoFile = Request.Form.Files[0];
                 var newProduct = await _product.AddProductAsync(productModel);
                 var product = await _product.GetProductAsync(newProduct);
                 return product == null ? NotFound() : Ok(product);

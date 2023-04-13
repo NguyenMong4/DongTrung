@@ -15,7 +15,7 @@ namespace WebDongTrung.Repositories
         public Task<int> AddProductAsync(Product product);
         public Task UpdateProductAsync(int id, Product product);
         public Task DeleteProductAsync(int id);
-        public List<ProductModel> GetAllProduct(string? search,string? sortBy, int? productType, int page);
+        public List<ProductModel> GetAllProduct(string? search,string? sortBy, int? productType, int? page);
         public IEnumerable<ProductModel> GetProductsDiscount();
 
     }

@@ -16,6 +16,8 @@ namespace WebDongTrung.Datas
         public int Discount { get; set; }
         public string? GeneralInformation { get; set; }
         public string? Photo { get; set; }
+        [NotMapped]
+        public IFormFile? PhotoFile {get;set;}
         public int? RealityQuantity {get;set;}
         public int? SystemQuantity {get;set;}
     }
