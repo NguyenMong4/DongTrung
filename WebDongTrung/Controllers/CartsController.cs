@@ -19,7 +19,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCarts(string? search, int page)
+        public IActionResult GetAllCarts(string? search, int? page)
         {
            try
             {

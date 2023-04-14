@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.Models;
-using WebDongTrung.Repositories.CartClient;
 
 namespace WebDongTrung.Controllers
 {
@@ -14,13 +9,11 @@ namespace WebDongTrung.Controllers
     [Route("api/[controller]")]
     public class CartClientController : ControllerBase
     {
-        private readonly ICartClient _cartClient;
         private readonly IMapper _mapper;
         private readonly StoreDbContex _contex;
-        public CartClientController(ICartClient cartClient, IMapper mapper, StoreDbContex contex)
+        public CartClientController(IMapper mapper, StoreDbContex contex)
         {
             _contex = contex;
-            _cartClient = cartClient;
             _mapper = mapper;
         }
 
@@ -29,7 +22,7 @@ namespace WebDongTrung.Controllers
         {
             var cart = _mapper.Map<Cart>(cartModel);
             cart.CreateId = "KH";
-            cart.UpdateId = "KH";
+            cart.CreateAt = DateTime.Now;
             await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
             var idCart = cart.Id;
@@ -38,7 +31,7 @@ namespace WebDongTrung.Controllers
                 var cartDetail = _mapper.Map<CartDetail>(item);
                 cartDetail.IdCart = idCart;
                 cartDetail.CreateId = "KH";
-                cartDetail.UpdateId = "KH";
+                cartDetail.CreateAt = DateTime.Now;
                 await _contex.CartDetails!.AddAsync(cartDetail);
                 await _contex.SaveChangesAsync();
             }

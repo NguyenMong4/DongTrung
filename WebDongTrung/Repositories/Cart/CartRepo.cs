@@ -46,7 +46,7 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public List<CartModel> GetAllCart(string? search, int page = 1)
+        public List<CartModel> GetAllCart(string? search, int? page = 1)
         {
             var allCart = _contex.Carts!.AsQueryable();
             //searching
@@ -55,7 +55,10 @@ namespace WebDongTrung.Repositories
                 allCart = allCart.Where(p => p.Phone!.Contains(search));
             }
             allCart = allCart.OrderByDescending(p => p.CreateAt);
-            allCart = allCart.Skip((page - 1) * PageSize).Take(PageSize);
+            if (page != null)
+            {
+                allCart = allCart.Skip((int)((page - 1) * PageSize)).Take(PageSize);
+            }
 
             var result = allCart.Select(p => new CartModel
             {
