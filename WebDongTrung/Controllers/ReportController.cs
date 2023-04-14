@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO;
@@ -19,10 +15,10 @@ namespace WebDongTrung.Controllers
             _context = contex;
         }
         [HttpGet]
-        public IActionResult ReportMonth(string from, string to)
+        public IActionResult ReportMonth(string? from, string? to)
         {
-            var fromDate = DateTime.Parse(from);
-            var toDate = DateTime.Parse(to);
+            var fromDate = DateTime.Parse(from!);
+            var toDate = DateTime.Parse(to!);
             var cart = _context.Carts!.Where(p => (p.CreateAt >= fromDate) && (p.CreateAt <= toDate));
             ReportDto rp = new()
             {
