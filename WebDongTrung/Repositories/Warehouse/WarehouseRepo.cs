@@ -34,8 +34,6 @@ namespace WebDongTrung.Repositories
                             IdProduct = item.IdProduct,
                             ImportPrice = item.ImportPrice,
                             ImportQuantity = item.ImportQuantity,
-                            RealityQuantity = product.RealityQuantity,
-                            SystemQuantity = product.SystemQuantity
                         };
                         product.RealityQuantity += item.ImportQuantity;
                         product.SystemQuantity += item.ImportQuantity;
@@ -74,10 +72,24 @@ namespace WebDongTrung.Repositories
 
         public async Task<WarehouseModel> GetWarehouseAsync(string id)
         {
-            var warehouse = await _contex.ImportBills!
+            var warehouse = _contex.ImportBills!
                 .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
-                .Where(x => x.Bill.Id.Contains(id)).OrderBy(p => p.WareHouse.IdProduct).FirstOrDefaultAsync();
-            return _mapper.Map<WarehouseModel>(warehouse);
+                .Join(_contex.Products!, w => w.WareHouse.IdProduct , p => p.Id, (w,p) => new {Prod = p, Import = w})
+                .Where(x => x.Import.Bill.Id.Contains(id)).Select(x=> new WarehouseModel {
+                    Id = x.Import.WareHouse.IdBill,
+                    Import_date = x.Import.Bill.Import_date,
+                    TotalPrice = x.Import.Bill.Total_price,
+                    ProductWarehouses = new List<ProductWarehouseModel>() {
+                        new ProductWarehouseModel {
+                            IdProduct = x.Prod.Id,
+                            NameProduct = x.Prod.Name,
+                            ImportPrice = x.Import.WareHouse.ImportPrice,
+                            ImportQuantity = x.Import.WareHouse.ImportQuantity,
+                            }
+                    }
+                });
+            var result = await warehouse!.FirstOrDefaultAsync();
+            return result ?? new WarehouseModel();
         }
 
         public async Task UpdateWarehouseAsync(string id, WarehouseModel warehouseModel)

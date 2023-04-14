@@ -13,7 +13,5 @@ namespace WebDongTrung.Datas
         public int IdProduct { get; set; }
         public int ImportQuantity { get; set; }
         public int? ImportPrice { get; set; }
-        public int? RealityQuantity {get;set;}
-        public int? SystemQuantity {get;set;}
     }
 }
