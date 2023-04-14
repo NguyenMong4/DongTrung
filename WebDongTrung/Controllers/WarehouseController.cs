@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.Models;
@@ -20,11 +16,11 @@ namespace WebDongTrung.Controllers
             _warehouse = warehouse;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllWarehouse()
+        public async Task<IActionResult> GetAllWarehouse(int? page)
         {
             try
             {
-                return Ok(await _warehouse.GetAllWarehouseAsync());
+                return Ok(await _warehouse.GetAllImportBillAsync(page));
             }
             catch
             {
@@ -48,11 +44,11 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWarehouse(string id, Warehouse warehouse)
+        public async Task<IActionResult> UpdateWarehouse(string id, WarehouseModel warehouseModel)
         {
             try
             {
-                await _warehouse.UpdateWarehouseAsync(id, warehouse);
+                await _warehouse.UpdateWarehouseAsync(id, warehouseModel);
                 return Ok();
             }
             catch
@@ -73,7 +69,6 @@ namespace WebDongTrung.Controllers
             {
                 return BadRequest();
             }
-
         }
     }
 }

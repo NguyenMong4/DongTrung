@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using WebDongTrung.Datas;
 using WebDongTrung.Models;
@@ -17,6 +13,9 @@ namespace WebDongTrung.Helper
             CreateMap<CartDetail, CartDetailModel>().ReverseMap();
             CreateMap<Employee, EmployeeModel>().ReverseMap();
             CreateMap<List<object>,CartDetailModel>().ReverseMap();
+            CreateMap<object,WarehouseModel>().ReverseMap();
+            CreateMap<Warehouse,WarehouseModel>().ReverseMap();
+            CreateMap<ImportBill,WarehouseModel>().ReverseMap();
         }
     }
 }

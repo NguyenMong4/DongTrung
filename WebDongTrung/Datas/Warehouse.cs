@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebDongTrung.Datas
 {
-    public class Warehouse : SystemProperties
+    public class Warehouse
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; } = null!;
+        [Column(Order = 1)]
+        public string IdBill { get; set; } = null!;
         [Key]
+        [Column(Order = 2)]
         public int IdProduct { get; set; }
         public int ImportQuantity { get; set; }
         public int? ImportPrice { get; set; }
