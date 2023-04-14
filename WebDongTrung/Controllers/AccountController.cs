@@ -40,8 +40,7 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("grant_type", "password")
             });
             var respon = await clien.PostAsync($"{url}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
-            var token = new JsonResult(JsonSerializer.Deserialize<object>(await respon.Content.ReadAsStringAsync()));
-            return token;
+            return new JsonResult(JsonSerializer.Deserialize<object>(await respon.Content.ReadAsStringAsync()));
         }
 
         [HttpPost("create")]
