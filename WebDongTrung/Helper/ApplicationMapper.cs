@@ -13,7 +13,7 @@ namespace WebDongTrung.Helper
             CreateMap<CartDetail, CartDetailModel>().ReverseMap();
             CreateMap<Employee, EmployeeModel>().ReverseMap();
             CreateMap<List<object>,CartDetailModel>().ReverseMap();
-            CreateMap<object,WarehouseModel>().ReverseMap();
+            CreateMap<List<object>,WarehouseModel>().ReverseMap();
             CreateMap<Warehouse,WarehouseModel>().ReverseMap();
             CreateMap<ImportBill,WarehouseModel>().ReverseMap();
         }

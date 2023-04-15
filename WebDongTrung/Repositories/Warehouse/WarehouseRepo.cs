@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.WareHouseDto;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
@@ -16,14 +17,16 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string> AddWarehouseAsync(WarehouseModel warehouseModel)
+        public async Task<string> AddWarehouseAsync(CreateWareHouseDto newWarehouse)
         {
             try
             {
                 string id = "Imp" + DateTime.Now.ToString("yyyyMMddHHmm");
-                var impBill = _mapper.Map<ImportBill>(warehouseModel);
+                var impBill = _mapper.Map<ImportBill>(newWarehouse);
+                impBill.Id = id;
+                impBill.CreateAt = DateTime.Now;
                 _contex.ImportBills!.Add(impBill);
-                foreach (var item in warehouseModel.ProductWarehouses)
+                foreach (var item in newWarehouse.ProductWarehouses)
                 {
                     var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
                     if (product != null)
@@ -75,21 +78,10 @@ namespace WebDongTrung.Repositories
             var warehouse = _contex.ImportBills!
                 .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
                 .Join(_contex.Products!, w => w.WareHouse.IdProduct , p => p.Id, (w,p) => new {Prod = p, Import = w})
-                .Where(x => x.Import.Bill.Id.Contains(id)).Select(x=> new WarehouseModel {
-                    Id = x.Import.WareHouse.IdBill,
-                    Import_date = x.Import.Bill.Import_date,
-                    TotalPrice = x.Import.Bill.Total_price,
-                    ProductWarehouses = new List<ProductWarehouseModel>() {
-                        new ProductWarehouseModel {
-                            IdProduct = x.Prod.Id,
-                            NameProduct = x.Prod.Name,
-                            ImportPrice = x.Import.WareHouse.ImportPrice,
-                            ImportQuantity = x.Import.WareHouse.ImportQuantity,
-                            }
-                    }
-                });
-            var result = await warehouse!.FirstOrDefaultAsync();
-            return result ?? new WarehouseModel();
+                .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
+            
+
+            return _mapper.Map<WarehouseModel>(warehouse);
         }
 
         public async Task UpdateWarehouseAsync(string id, WarehouseModel warehouseModel)

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.WareHouseDto;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
@@ -36,10 +37,10 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddWarehouse(WarehouseModel warehouse)
+        public async Task<ActionResult> AddWarehouse(CreateWareHouseDto newWarehouse)
         {
-            var newWarehouse = await _warehouse.AddWarehouseAsync(warehouse);
-            var wareh = await _warehouse.GetWarehouseAsync(newWarehouse);
+            var warehouse = await _warehouse.AddWarehouseAsync(newWarehouse);
+            var wareh = await _warehouse.GetWarehouseAsync(warehouse);
             return wareh == null ? NotFound() : Ok(wareh);
         }
 
