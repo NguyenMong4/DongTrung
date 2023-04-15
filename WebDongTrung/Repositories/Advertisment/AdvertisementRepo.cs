@@ -10,7 +10,7 @@ namespace WebDongTrung.Repositories.Advertisment
 {
     public class AdvertisementRepo : IAdvertisment
     {
-         private readonly StoreDbContex _context;
+        private readonly StoreDbContex _context;
         private readonly IMapper _mapper;
 
         public AdvertisementRepo(StoreDbContex contex, IMapper mapper)
@@ -49,11 +49,9 @@ namespace WebDongTrung.Repositories.Advertisment
 
         public async Task UpdateAdvertisAsync(int id, Advertisement adver)
         {
-            if (id == adver.Id)
-            {
-                _context.Advertisements!.Update(adver);
-                await _context.SaveChangesAsync();
-            }
+            adver.Id = id;
+            _context.Advertisements!.Update(adver);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -77,23 +77,21 @@ namespace WebDongTrung.Repositories
         {
             var warehouse = _contex.ImportBills!
                 .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
-                .Join(_contex.Products!, w => w.WareHouse.IdProduct , p => p.Id, (w,p) => new {Prod = p, Import = w})
+                .Join(_contex.Products!, w => w.WareHouse.IdProduct, p => p.Id, (w, p) => new { Prod = p, Import = w })
                 .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
-            
+
 
             return _mapper.Map<WarehouseModel>(warehouse);
         }
 
         public async Task UpdateWarehouseAsync(string id, WarehouseModel warehouseModel)
         {
-            if (id.Equals(warehouseModel.Id))
-            {
-                var impBill = _mapper.Map<ImportBill>(warehouseModel);
-                var warehouse = _mapper.Map<Warehouse>(warehouseModel);
-                _contex.ImportBills!.Update(impBill);
-                _contex.Warehouses!.Update(warehouse);
-                await _contex.SaveChangesAsync();
-            }
+            warehouseModel.Id = id;
+            var impBill = _mapper.Map<ImportBill>(warehouseModel);
+            var warehouse = _mapper.Map<Warehouse>(warehouseModel);
+            _contex.ImportBills!.Update(impBill);
+            _contex.Warehouses!.Update(warehouse);
+            await _contex.SaveChangesAsync();
         }
     }
 }

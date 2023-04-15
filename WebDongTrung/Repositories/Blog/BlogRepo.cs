@@ -43,7 +43,7 @@ namespace WebDongTrung.Repositories
 
         public async Task<IEnumerable<Blog>> GetAllBlogAsync(int type)
         {
-            var blogs = await _context.Blogs!.Where(blog=>blog.Type == type).ToListAsync();
+            var blogs = await _context.Blogs!.Where(blog => blog.Type == type).ToListAsync();
             return _mapper.Map<IEnumerable<Blog>>(blogs);
         }
 
@@ -55,14 +55,12 @@ namespace WebDongTrung.Repositories
 
         public async Task UpdateBlogAsync(int id, Blog blog)
         {
-            if (id == blog.Id)
-            {
-                var blogs = _mapper.Map<Blog>(blog);
-                blogs.UpdateAt = DateTime.Now;
-                blogs.UpdateId = "admin";
-                _context.Blogs!.Update(blogs);
-                await _context.SaveChangesAsync();
-            }
+            blog.Id = id;
+            var blogs = _mapper.Map<Blog>(blog);
+            blogs.UpdateAt = DateTime.Now;
+            blogs.UpdateId = "admin";
+            _context.Blogs!.Update(blogs);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -79,38 +79,36 @@ namespace WebDongTrung.Repositories
 
         public async Task UpDateCartAsync(int id, CartModel cartModel)
         {
-            if (id == cartModel.Id)
+            cartModel.Id = id;
+            var cart = _mapper.Map<Cart>(cartModel);
+            cart.UpdateAt = DateTime.Now;
+            _contex.Carts!.Update(cart);
+            foreach (var item in cartModel.CartDetailModel)
             {
-                var cart = _mapper.Map<Cart>(cartModel);
-                cart.UpdateAt = DateTime.Now;
-                _contex.Carts!.Update(cart);
-                foreach (var item in cartModel.CartDetailModel)
+                var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
+                if (product != null)
                 {
-                    var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
-                    if (product != null)
+                    if (product.Discount != 0)
                     {
-                        if (product.Discount != 0)
-                        {
-                            item.Quantity += item.Quantity / product.Discount;
-                        }
-
-                        if (cart.Status == 1) //trạng thái : đang giao hàng
-                        {
-                            product.RealityQuantity -= item.Quantity;
-                        }
-                        else if (cart.Status == 2) // trạng thái: giao hàng thành công
-                        {
-                            product.SystemQuantity -= item.Quantity;
-                        }
-                        else if (cart.Status == 3) //trạng thái : Hoàn đơn
-                        {
-                            product.RealityQuantity += item.Quantity;
-                        }
-                        _contex.Products!.Update(product);
+                        item.Quantity += item.Quantity / product.Discount;
                     }
+
+                    if (cart.Status == 1) //trạng thái : đang giao hàng
+                    {
+                        product.RealityQuantity -= item.Quantity;
+                    }
+                    else if (cart.Status == 2) // trạng thái: giao hàng thành công
+                    {
+                        product.SystemQuantity -= item.Quantity;
+                    }
+                    else if (cart.Status == 3) //trạng thái : Hoàn đơn
+                    {
+                        product.RealityQuantity += item.Quantity;
+                    }
+                    _contex.Products!.Update(product);
                 }
-                await _contex.SaveChangesAsync();
             }
+            await _contex.SaveChangesAsync();
         }
     }
 }

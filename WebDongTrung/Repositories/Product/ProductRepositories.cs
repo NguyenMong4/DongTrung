@@ -55,7 +55,7 @@ namespace WebDongTrung.Repositories
             }
 
             //page
-            if(page != null)
+            if (page != null)
                 allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
 
             var result = allProduct.Select(p => new ProductModel
@@ -118,12 +118,10 @@ namespace WebDongTrung.Repositories
 
         public async Task UpdateProductAsync(int id, Product model)
         {
-            if (id == model.Id)
-            {
-                var product = _mapper.Map<Product>(model);
-                _contex.Products!.Update(product);
-                await _contex.SaveChangesAsync();
-            }
+            model.Id = id;
+            var product = _mapper.Map<Product>(model);
+            _contex.Products!.Update(product);
+            await _contex.SaveChangesAsync();
         }
 
         public IEnumerable<ProductModel> GetProductsDiscount()

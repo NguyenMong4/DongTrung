@@ -21,11 +21,11 @@ namespace WebDongTrung.Repositories
 
         public async Task<int> AddProductTypeAsync(ProductType productType)
         {
-             var newProductType = _mapper.Map<ProductType>(productType);
-             newProductType.CreateAt = DateTime.Now;
-             newProductType.CreateId = "admin";
-             newProductType.UpdateAt = DateTime.Now;
-             newProductType.UpdateId = "admin";
+            var newProductType = _mapper.Map<ProductType>(productType);
+            newProductType.CreateAt = DateTime.Now;
+            newProductType.CreateId = "admin";
+            newProductType.UpdateAt = DateTime.Now;
+            newProductType.UpdateId = "admin";
             _contex.ProductTypes!.Add(newProductType);
             await _contex.SaveChangesAsync();
             return newProductType.Id;
@@ -55,14 +55,12 @@ namespace WebDongTrung.Repositories
 
         public async Task UpdateProductTypeAsync(int id, ProductType productType)
         {
-            if (id == productType.Id)
-            {
-                var productTypes = _mapper.Map<ProductType>(productType);
-                productTypes.UpdateAt = DateTime.Now;
-                productType.UpdateId = "nguyenpv";
-                _contex.ProductTypes!.Update(productTypes);
-                await _contex.SaveChangesAsync();
-            }
+            productType.Id = id;
+            var productTypes = _mapper.Map<ProductType>(productType);
+            productTypes.UpdateAt = DateTime.Now;
+            productType.UpdateId = "nguyenpv";
+            _contex.ProductTypes!.Update(productTypes);
+            await _contex.SaveChangesAsync();
         }
     }
 }
