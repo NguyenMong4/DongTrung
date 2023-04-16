@@ -11,7 +11,6 @@ namespace WebDongTrung.Repositories
 {
     public interface IProducts
     {
-        public Task<IEnumerable<Product>> GetAllProductAsync();
         public Task<Product> GetProductAsync(int id);
         public Task<int> AddProductAsync(ProductCreateDto product);
         public Task UpdateProductAsync(int id, ProductCreateDto productUpdate);

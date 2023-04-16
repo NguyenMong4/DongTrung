@@ -14,5 +14,6 @@ namespace WebDongTrung.Models
         public decimal? Price { get; set; }
         public int? Discount { get; set; }
         public string? Photo { get; set; }
+        public int? ProductTypeId { get; set; }
     }
 }

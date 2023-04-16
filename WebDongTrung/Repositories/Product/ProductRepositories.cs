@@ -60,7 +60,8 @@ namespace WebDongTrung.Repositories
                 Name = p.Name,
                 Price = p.Price,
                 Discount = p.Discount,
-                Photo = p.Photo
+                Photo = p.Photo,
+                ProductTypeId = p.ProductTypeId
             });
 
             return result.ToList();
@@ -101,12 +102,6 @@ namespace WebDongTrung.Repositories
                 _contex.Products!.Remove(product);
                 await _contex.SaveChangesAsync();
             }
-        }
-
-        public async Task<IEnumerable<Product>> GetAllProductAsync()
-        {
-            var products = await _contex.Products!.ToListAsync();
-            return _mapper.Map<IEnumerable<Product>>(products);
         }
 
         public async Task<Product> GetProductAsync(int id)
