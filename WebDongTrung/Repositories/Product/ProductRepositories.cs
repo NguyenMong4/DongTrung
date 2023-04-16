@@ -1,12 +1,8 @@
-using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebDongTrung.Models;
 using WebDongTrung.Datas;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using WebDongTrung.DTO.Product;
 
 namespace WebDongTrung.Repositories
 {
@@ -70,20 +66,23 @@ namespace WebDongTrung.Repositories
             return result.ToList();
         }
 
-        public async Task<int> AddProductAsync(Product product)
+        public async Task<int> AddProductAsync(ProductCreateDto productCreate)
         {
             try
             {
-                if (product.PhotoFile != null)
+                var product = _mapper.Map<Product>(productCreate);
+                if (productCreate.PhotoFile != null)
                 {
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
-                    var filePath = Path.Combine(directory, product.PhotoFile.FileName);
-                    product.Photo = $"wwwroot/images/{product.PhotoFile.FileName}";
+                    var filePath = Path.Combine(directory, productCreate.PhotoFile.FileName);
+                    product.Photo = $"wwwroot/images/{productCreate.PhotoFile.FileName}";
                     using FileStream fs = new(filePath, FileMode.Create);
-                    product.PhotoFile.CopyTo(fs);
+                    productCreate.PhotoFile.CopyTo(fs);
                     fs.Close();
                 }
+                product.CreateAt = DateTime.Now;
+                product.CreateId = "addmin";
                 _contex.Products!.Add(product);
                 await _contex.SaveChangesAsync();
                 return product.Id;
@@ -116,12 +115,30 @@ namespace WebDongTrung.Repositories
             return _mapper.Map<Product>(product);
         }
 
-        public async Task UpdateProductAsync(int id, Product model)
+        public async Task UpdateProductAsync(int id, ProductCreateDto productUpdate)
         {
-            model.Id = id;
-            var product = _mapper.Map<Product>(model);
-            _contex.Products!.Update(product);
-            await _contex.SaveChangesAsync();
+            try
+            {
+                var product = _mapper.Map<Product>(productUpdate);
+                if(productUpdate.PhotoFile != null){
+                    var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
+                    Directory.CreateDirectory(directory);
+                    var filePath = Path.Combine(directory, productUpdate.PhotoFile.FileName);
+                    product.Photo = $"wwwroot/images/{productUpdate.PhotoFile.FileName}";
+                    using FileStream fs = new(filePath, FileMode.Create);
+                    productUpdate.PhotoFile.CopyTo(fs);
+                    fs.Close();
+                }
+                product.Id = id;
+                product.UpdateAt = DateTime.Now;
+                product.UpdateId = "nguyenpv";
+                _contex.Products!.Update(product);
+                await _contex.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public IEnumerable<ProductModel> GetProductsDiscount()

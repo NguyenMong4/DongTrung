@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories.Advertisment
 {
@@ -12,18 +9,41 @@ namespace WebDongTrung.Repositories.Advertisment
     {
         private readonly StoreDbContex _context;
         private readonly IMapper _mapper;
+        private readonly IHostEnvironment _env;
 
-        public AdvertisementRepo(StoreDbContex contex, IMapper mapper)
+        public AdvertisementRepo(StoreDbContex contex, IMapper mapper, IHostEnvironment env)
         {
             _context = contex;
             _mapper = mapper;
+            _env = env;
         }
 
-        public async Task<int> AddAdvertisAsync(Advertisement adver)
+        public async Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel)
         {
-            _context.Advertisements!.Add(adver);
-            await _context.SaveChangesAsync();
-            return adver.Id;
+            try
+            {
+                var adver = _mapper.Map<Advertisement>(advertisementModel);
+                if (advertisementModel.PhotoFile != null)
+                {
+                    var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
+                    Directory.CreateDirectory(directory);
+                    var filePath = Path.Combine(directory, advertisementModel.PhotoFile.FileName);
+                    adver.Photo = $"wwwroot/images/{advertisementModel.PhotoFile.FileName}";
+                    using FileStream fs = new(filePath, FileMode.Create);
+                    advertisementModel.PhotoFile.CopyTo(fs);
+                    fs.Close();
+
+                }
+                adver.CreateAt = DateTime.Now;
+                adver.CreateId = "admin";
+                var id = _context.Advertisements!.Add(adver);
+                await _context.SaveChangesAsync();
+                return adver.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
         public async Task DeleteAdvertisAsync(int id)
@@ -47,11 +67,31 @@ namespace WebDongTrung.Repositories.Advertisment
             return _mapper.Map<Advertisement>(adver);
         }
 
-        public async Task UpdateAdvertisAsync(int id, Advertisement adver)
+        public async Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel)
         {
-            adver.Id = id;
-            _context.Advertisements!.Update(adver);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var adver = _mapper.Map<Advertisement>(advertisementModel);
+                if (advertisementModel.PhotoFile != null)
+                {
+                    var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
+                    Directory.CreateDirectory(directory);
+                    var filePath = Path.Combine(directory, advertisementModel.PhotoFile.FileName);
+                    adver.Photo = $"wwwroot/images/{advertisementModel.PhotoFile.FileName}";
+                    using FileStream fs = new(filePath, FileMode.Create);
+                    advertisementModel.PhotoFile.CopyTo(fs);
+                    fs.Close();
+                }
+                adver.Id = id;
+                adver.UpdateAt = DateTime.Now;
+                adver.UpdateId = "nguyenpv";
+                _context.Advertisements!.Update(adver);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebDongTrung.Datas;
+using WebDongTrung.Models;
 using WebDongTrung.Repositories.Advertisment;
 
 namespace WebDongTrung.Controllers
@@ -39,7 +35,8 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Addadvertis(Advertisement advertis)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> Addadvertis([FromForm]AdvertisementModel advertis)
         {
             try
             {
@@ -54,7 +51,8 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Updateadvertis(int id, Advertisement advertis)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Updateadvertis(int id, [FromForm]AdvertisementModel advertis)
         {
             try
             {

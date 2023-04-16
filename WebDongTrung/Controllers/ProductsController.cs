@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Product;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
@@ -45,12 +46,10 @@ namespace WebDongTrung.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        // enctype='multipart/form-data'
-        public async Task<ActionResult> AddProduct([FromForm]Product productModel)
+        public async Task<ActionResult> AddProduct([FromForm]ProductCreateDto productModel)
         {
             try
             {
-                // productModel.PhotoFile = Request.Form.Files[0];
                 var newProduct = await _product.AddProductAsync(productModel);
                 var product = await _product.GetProductAsync(newProduct);
                 return product == null ? NotFound() : Ok(product);
@@ -62,7 +61,8 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, Product productModel)
+         [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProduct(int id,[FromForm] ProductCreateDto productModel)
         {
             try
             {

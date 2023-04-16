@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Product;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
@@ -12,8 +13,8 @@ namespace WebDongTrung.Repositories
     {
         public Task<IEnumerable<Product>> GetAllProductAsync();
         public Task<Product> GetProductAsync(int id);
-        public Task<int> AddProductAsync(Product product);
-        public Task UpdateProductAsync(int id, Product product);
+        public Task<int> AddProductAsync(ProductCreateDto product);
+        public Task UpdateProductAsync(int id, ProductCreateDto productUpdate);
         public Task DeleteProductAsync(int id);
         public List<ProductModel> GetAllProduct(string? search,string? sortBy, int? productType, int? page);
         public IEnumerable<ProductModel> GetProductsDiscount();
