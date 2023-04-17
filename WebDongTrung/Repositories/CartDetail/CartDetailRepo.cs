@@ -36,7 +36,6 @@ namespace WebDongTrung.Repositories
                 IdCart = c.c.IdCart,
                 Name = c.p.Name,
                 Price = c.c.Price,
-                Photo = c.p.Photo,
                 Quantity = c.c.Quantity
             }).Where(c=>c.IdCart == id);
             return Task.FromResult(cartdetail.ToList());

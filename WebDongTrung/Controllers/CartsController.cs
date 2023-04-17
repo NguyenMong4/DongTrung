@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
@@ -39,7 +40,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCart(CartModel cart)
+        public async Task<IActionResult> AddCart(CartCreateDto cart)
         {
             try
             {

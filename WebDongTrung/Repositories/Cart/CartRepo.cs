@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
@@ -16,23 +17,23 @@ namespace WebDongTrung.Repositories
             _contex = contex;
             _mapper = mapper;
         }
-        public async Task<int> AddCartAsync(CartModel cartModel)
+        public async Task<int> AddCartAsync(CartCreateDto cartCreate)
         {
-            var cart = _mapper.Map<Cart>(cartModel);
+            var cart = _mapper.Map<Cart>(cartCreate);
             cart.CreateId = "admin";
             cart.CreateAt = DateTime.Now;
             await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
             var idCart = cart.Id;
-            foreach (var item in cartModel.CartDetailModel)
+            foreach (var item in cartCreate.CartDetailModel)
             {
                 var cartDetail = _mapper.Map<CartDetail>(item);
                 cartDetail.IdCart = idCart;
                 cartDetail.CreateId = "admin";
                 cartDetail.CreateAt = DateTime.Now;
                 await _contex.CartDetails!.AddAsync(cartDetail);
-                await _contex.SaveChangesAsync();
             }
+            await _contex.SaveChangesAsync();
             return cart.Id;
         }
 
