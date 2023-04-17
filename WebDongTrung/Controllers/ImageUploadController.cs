@@ -13,7 +13,7 @@ namespace WebDongTrung.Controllers
             _environment = environment;
         }
         [HttpPost]
-        public Task<common> Post([FromForm] FileUploadAPI objFile)
+        public string Post([FromForm] FileUploadAPI objFile)
         {
             common obj = new()
             {
@@ -21,7 +21,7 @@ namespace WebDongTrung.Controllers
             };
             try
             {
-                if (objFile.Files.Length > 0)
+                if (objFile.Files != null && objFile.Files!.Length > 0)
                 {
                     if (!Directory.Exists(_environment.WebRootPath + "/images"))
                     {
@@ -30,14 +30,15 @@ namespace WebDongTrung.Controllers
                     using FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "/images/" + objFile.Files.FileName);
                     objFile.Files.CopyTo(filestream);
                     filestream.Flush();
-                    //  return "\\Upload\\" + objFile.files.FileName;
+                    return "/images/" + objFile.Files.FileName;
                 }
             }
             catch (Exception)
             {
                 throw;
             }
-            return Task.FromResult(obj);
+
+            return null;
         }
     }
 }
