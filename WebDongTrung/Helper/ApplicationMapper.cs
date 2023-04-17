@@ -19,6 +19,7 @@ namespace WebDongTrung.Helper
             CreateMap<Warehouse, WarehouseModel>().ReverseMap();
             CreateMap<ImportBill, WarehouseModel>().ReverseMap();
             CreateMap<Advertisement, AdvertisementModel>().ReverseMap();
+            CreateMap<Blog, BlogModel>().ReverseMap();
         }
     }
 }

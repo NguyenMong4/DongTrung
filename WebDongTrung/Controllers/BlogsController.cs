@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
 namespace WebDongTrung.Controllers
@@ -82,11 +83,12 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddBlog(Blog blog)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult> AddBlog([FromForm]BlogModel blogModel)
         {
             try
             {
-                var newBlog = await _blog.AddBlogAsync(blog);
+                var newBlog = await _blog.AddBlogAsync(blogModel);
                 var blg = await _blog.GetBlogAsync(newBlog!);
                 return blg == null ? NotFound() : Ok(blg);
             }
@@ -97,11 +99,12 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlog(int id, Blog blog)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateBlog(int id, [FromForm]BlogModel blogModel)
         {
             try
             {
-                await _blog.UpdateBlogAsync(id, blog);
+                await _blog.UpdateBlogAsync(id, blogModel);
                 return Ok();
             }
             catch

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -10,8 +7,8 @@ namespace WebDongTrung.Repositories
     {
         public Task<IEnumerable<Blog>> GetAllBlogAsync(int type);
         public Task<Blog> GetBlogAsync(int id);
-        public Task<int> AddBlogAsync(Blog blog);
-        public Task UpdateBlogAsync(int id, Blog blog);
+        public Task<int> AddBlogAsync(BlogModel blogModel);
+        public Task UpdateBlogAsync(int id, BlogModel blogModel);
         public Task DeleteBlogAsync(int id);
     }
 }
