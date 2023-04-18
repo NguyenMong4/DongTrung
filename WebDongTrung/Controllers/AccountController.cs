@@ -19,18 +19,18 @@ namespace WebDongTrung.Controllers
         public IEmployees _employee;
         public AuthenticationResponse _authenticationResponse;
         public UserInfo _userInfo;
-        public AccountController(IConfiguration config, IEmployees employee, AuthenticationResponse authenticationResponse,UserInfo userInfo )
+        public AccountController(IConfiguration config, IEmployees employee )
         {
             _config = config;
             _employee = employee;
-            _authenticationResponse = authenticationResponse;
-            _userInfo = userInfo;
+            // _authenticationResponse = authenticationResponse;
+            // _userInfo = userInfo;
         }
         public string url = "http://localhost:8080";
         [HttpPost]
         public async Task<JsonResult> Login([FromBody] LoginModel loginModel)
         {
-            _authenticationResponse = new();
+           // _authenticationResponse = new();
             HttpClient clien = new();
             var content = new FormUrlEncodedContent(new[]{
                 new KeyValuePair<string, string>("client_id", _config["KeyCloak:client_id"]),
@@ -40,8 +40,19 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("grant_type", "password")
             });
             var respon = await clien.PostAsync($"{url}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
-            _authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
-            return new JsonResult(_authenticationResponse);
+            var authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
+            var userName =  new JwtSecurityToken(authenticationResponse.access_token).Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+            Response.Cookies.Append("CookieAccestoken",authenticationResponse.access_token,new CookieOptions(){
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = false,
+            }); 
+            Response.Cookies.Append("CookieUserName",userName,new CookieOptions(){
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = false,
+            }); 
+            return new JsonResult(authenticationResponse);
         }
         [HttpGet("getusername")]
         public async Task<string> GetUserName()

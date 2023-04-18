@@ -58,6 +58,7 @@ namespace WebDongTrung.Controllers
         {
             try
             {
+                var username = Request.Cookies["CookieUserName"];
                 await _productType.UpdateProductTypeAsync(id, productType);
                 return Ok();
             }
