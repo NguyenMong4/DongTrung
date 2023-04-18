@@ -5,6 +5,9 @@ using WebDongTrung.Common.Keycloak;
 using System.Text;
 using WebDongTrung.DTO;
 using WebDongTrung.Repositories;
+using WebDongTrung.Common.Keycloak.Models;
+using System.IdentityModel.Tokens.Jwt;
+using WebDongTrung.Common.Utils;
 
 namespace WebDongTrung.Controllers
 {
@@ -14,15 +17,20 @@ namespace WebDongTrung.Controllers
     {
         public IConfiguration _config = null!;
         public IEmployees _employee;
-        public AccountController(IConfiguration config, IEmployees employee)
+        public AuthenticationResponse _authenticationResponse;
+        public UserInfo _userInfo;
+        public AccountController(IConfiguration config, IEmployees employee, AuthenticationResponse authenticationResponse,UserInfo userInfo )
         {
             _config = config;
             _employee = employee;
+            _authenticationResponse = authenticationResponse;
+            _userInfo = userInfo;
         }
         public string url = "http://localhost:8080";
         [HttpPost]
         public async Task<JsonResult> Login([FromBody] LoginModel loginModel)
         {
+            _authenticationResponse = new();
             HttpClient clien = new();
             var content = new FormUrlEncodedContent(new[]{
                 new KeyValuePair<string, string>("client_id", _config["KeyCloak:client_id"]),
@@ -32,7 +40,23 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("grant_type", "password")
             });
             var respon = await clien.PostAsync($"{url}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
-            return new JsonResult(JsonSerializer.Deserialize<object>(await respon.Content.ReadAsStringAsync()));
+            _authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
+            return new JsonResult(_authenticationResponse);
+        }
+        [HttpGet("getusername")]
+        public async Task<string> GetUserName()
+        {
+            _userInfo = new UserInfo();
+            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var userId = new JwtSecurityToken(_authenticationResponse.access_token).Subject;
+            HttpClient client = new();
+            client.DefaultRequestHeaders.Remove("Accept");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
+            client.DefaultRequestHeaders.Remove("Authorization");
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
+            var respon = await client.GetAsync($"{url}/admin/realms/master/users/{userId}");
+            _userInfo = JsonSerializer.Deserialize<UserInfo>(await respon.Content.ReadAsStringAsync());
+            return _userInfo.Username;
         }
 
         [HttpPost("create")]
