@@ -12,7 +12,7 @@ namespace WebDongTrung.Repositories
     {
        public Task<IEnumerable<Employee>> GetAllEmployeeAsync();
        public Task<Employee?> GetEmployeeAsync(string id);
-       public Task<string?> AddEmployeeAsync(EmployeeModel employee);
+       public Task<string?> AddEmployeeAsync(EmployeeModel employee, string id);
        public Task UpdateEmployeeAsync(string username, EmployeeModel employee);
        public Task DeleteEmployeeAsync(string username);
     }

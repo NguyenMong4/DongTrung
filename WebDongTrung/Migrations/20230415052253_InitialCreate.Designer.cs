@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebDongTrung.Datas;
 
@@ -10,9 +11,10 @@ using WebDongTrung.Datas;
 namespace WebDongTrung.Migrations
 {
     [DbContext(typeof(StoreDbContex))]
-    partial class StoreDbContexModelSnapshot : ModelSnapshot
+    [Migration("20230415052253_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +33,6 @@ namespace WebDongTrung.Migrations
                     b.Property<string>("CreateId")
                         .HasMaxLength(12)
                         .HasColumnType("varchar(12)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Photo")
                         .HasColumnType("longtext");
@@ -71,9 +70,6 @@ namespace WebDongTrung.Migrations
                     b.Property<string>("CreateId")
                         .HasMaxLength(12)
                         .HasColumnType("varchar(12)");
-
-                    b.Property<string>("Photo")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Titel")
                         .HasColumnType("longtext");

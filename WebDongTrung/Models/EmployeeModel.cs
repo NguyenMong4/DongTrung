@@ -7,9 +7,8 @@ using WebDongTrung.Datas;
 
 namespace WebDongTrung.Models
 {
-    public class EmployeeModel : SystemProperties
+    public class EmployeeModel
     {
-        public string? Id { get; set; }
         public string? UserName { get; set; }
         [MaxLength(10)]
         public string? Phone { get; set; }

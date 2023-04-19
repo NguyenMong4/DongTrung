@@ -8,8 +8,7 @@ namespace WebDongTrung.Controllers
     [Route("api/[controller]")]
     public class AdvertismentController : ControllerBase
     {
-         private readonly IAdvertisment _advertis;
-
+        private readonly IAdvertisment _advertis;
         public AdvertismentController(IAdvertisment advertis)
         {
             _advertis = advertis;
@@ -27,7 +26,7 @@ namespace WebDongTrung.Controllers
                 return BadRequest();
             }
         }
-                [HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Getadvertis(int id)
         {
             var advertis = await _advertis.GetAdvertisAsync(id);
@@ -36,7 +35,7 @@ namespace WebDongTrung.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult> Addadvertis([FromForm]AdvertisementModel advertis)
+        public async Task<ActionResult> Addadvertis([FromForm] AdvertisementModel advertis)
         {
             try
             {
@@ -53,7 +52,7 @@ namespace WebDongTrung.Controllers
 
         [HttpPut("{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Updateadvertis(int id, [FromForm]AdvertisementModel advertis)
+        public async Task<IActionResult> Updateadvertis(int id, [FromForm] AdvertisementModel advertis)
         {
             try
             {

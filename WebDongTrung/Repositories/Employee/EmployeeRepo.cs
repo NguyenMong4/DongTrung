@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
-using WebDongTrung.DTO;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
@@ -21,12 +16,13 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string?> AddEmployeeAsync(EmployeeModel employee)
+        public async Task<string?> AddEmployeeAsync(EmployeeModel employee, string id)
         {
             var emp = _mapper.Map<Employee>(employee);
+            emp.Id = id;
             await _contex.Employees!.AddAsync(emp);
             await _contex.SaveChangesAsync();
-            return employee.Id;
+            return emp.Id;
         }
 
         public async Task DeleteEmployeeAsync(string username)

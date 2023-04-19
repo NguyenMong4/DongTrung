@@ -22,7 +22,6 @@ namespace WebDongTrung.Controllers
             _config = config;
             _employee = employee;
         }
-        public string url = "http://localhost:8080";
         [HttpPost]
         public async Task<JsonResult> Login([FromBody] LoginModel loginModel)
         {
@@ -34,7 +33,7 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("password", loginModel.Password),
                 new KeyValuePair<string, string>("grant_type", "password")
             });
-            var respon = await clien.PostAsync($"{url}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
+            var respon = await clien.PostAsync($"{_config["KeyCloak:url"]}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
             var authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
             var userName =  new JwtSecurityToken(authenticationResponse.access_token).Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
             Response.Cookies.Append("CookieAccestoken",authenticationResponse.access_token,new CookieOptions(){
@@ -53,7 +52,8 @@ namespace WebDongTrung.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] EmployeeModel employee)
         {
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            //var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var token = Request.Cookies["CookieAccestoken"];
             HttpClient client = new();
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
@@ -62,7 +62,7 @@ namespace WebDongTrung.Controllers
             HttpRequestMessage requestMessage = new()
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{url}/admin/realms/{_config["KeyCloak:realms"]}/users"),
+                RequestUri = new Uri($"{_config["KeyCloak:url"]}/admin/realms/{_config["KeyCloak:realms"]}/users"),
                 Content = new StringContent(JsonSerializer.Serialize(new
                 {
                     username = employee.UserName,
@@ -80,13 +80,13 @@ namespace WebDongTrung.Controllers
             var respone = await client.SendAsync(requestMessage);
             await respone.Content.ReadAsStringAsync();
 
-            var user = await client.GetAsync($"{url}/admin/realms/master/users?username={employee.UserName}");
+            var user = await client.GetAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users?username={employee.UserName}");
             var userM = JsonSerializer.Deserialize<List<UsersModel>>(await user.Content.ReadAsStringAsync());
             if (userM?.Count > 0)
             {
-                employee.Id = userM[0].id;
+                string id = userM[0].id;
                 //create in database
-                await _employee.AddEmployeeAsync(employee);
+                await _employee.AddEmployeeAsync(employee, id);
             }
 
             if (respone.IsSuccessStatusCode)
@@ -101,14 +101,14 @@ namespace WebDongTrung.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
             HttpClient client = new();
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
             client.DefaultRequestHeaders.Remove("Authorization");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
 
-            var respon = await client.GetAsync($"{url}/admin/realms/master/users");
+            var respon = await client.GetAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users");
 
             var users = JsonSerializer.Deserialize<List<UsersModel>>(await respon.Content.ReadAsStringAsync());
             foreach (var item in users!)
@@ -121,14 +121,14 @@ namespace WebDongTrung.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Getuser(string id)
         {
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
             HttpClient client = new();
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
             client.DefaultRequestHeaders.Remove("Authorization");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
 
-            var respon = await client.GetAsync($"{url}/admin/realms/master/users/{id}");
+            var respon = await client.GetAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users/{id}");
 
             var user = JsonSerializer.Deserialize<UsersModel>(await respon.Content.ReadAsStringAsync());
             user!.CreateAt = DateTimeOffset.FromUnixTimeMilliseconds(user.createdTimestamp);
@@ -138,7 +138,7 @@ namespace WebDongTrung.Controllers
         [HttpPut("{username}")]
         public async Task<IActionResult> UpdateUser(string username, EmployeeModel user)
         {
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
             HttpClient client = new();
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
@@ -148,7 +148,7 @@ namespace WebDongTrung.Controllers
             {
                 Email = user.Email
             }), Encoding.UTF8, "application/json");
-            var respone = await client.PutAsync($"{url}/admin/realms/master/users?username={username}", content);
+            var respone = await client.PutAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users?username={username}", content);
             await _employee.UpdateEmployeeAsync(username, user);
 
             return respone == null ? BadRequest() : Ok(await respone.Content.ReadAsStringAsync());
@@ -156,13 +156,13 @@ namespace WebDongTrung.Controllers
         [HttpDelete("{id},{username}")]
         public async Task<IActionResult> DeleteUser(string id, string username)
         {
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+            var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
             HttpClient client = new();
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
             client.DefaultRequestHeaders.Remove("Authorization");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
-            await client.DeleteAsync($"{url}/admin/realms/master/users/{id}");
+            await client.DeleteAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users/{id}");
             await _employee.DeleteEmployeeAsync(username);
             return Ok();
         }

@@ -39,20 +39,20 @@ namespace WebDongTrung.Controllers
             return employee == null ? NotFound() : Ok(employee);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> AddEmployee(EmployeeModel employee)
-        {
-            try
-            {
-                var newEmp = await _employee.AddEmployeeAsync(employee);
-                var emp = await _employee.GetEmployeeAsync(newEmp!);
-                return emp == null ? NotFound() : Ok(emp);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        // [HttpPost]
+        // public async Task<ActionResult> AddEmployee(EmployeeModel employee)
+        // {
+        //     try
+        //     {
+        //         var newEmp = await _employee.AddEmployeeAsync(employee);
+        //         var emp = await _employee.GetEmployeeAsync(newEmp!);
+        //         return emp == null ? NotFound() : Ok(emp);
+        //     }
+        //     catch
+        //     {
+        //         return BadRequest();
+        //     }
+        // }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(string id, EmployeeModel employee)
