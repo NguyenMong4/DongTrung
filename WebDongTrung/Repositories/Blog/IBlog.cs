@@ -7,8 +7,8 @@ namespace WebDongTrung.Repositories
     {
         public Task<IEnumerable<Blog>> GetAllBlogAsync(int type);
         public Task<Blog> GetBlogAsync(int id);
-        public Task<int> AddBlogAsync(BlogModel blogModel);
-        public Task UpdateBlogAsync(int id, BlogModel blogModel);
+        public Task<int> AddBlogAsync(BlogModel blogModel, string? username);
+        public Task UpdateBlogAsync(int id, BlogModel blogModel, string? username);
         public Task DeleteBlogAsync(int id);
     }
 }

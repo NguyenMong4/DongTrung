@@ -18,7 +18,7 @@ namespace WebDongTrung.Repositories.Advertisment
             _env = env;
         }
 
-        public async Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel)
+        public async Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel, string? username)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace WebDongTrung.Repositories.Advertisment
 
                 }
                 adver.CreateAt = DateTime.Now;
-                adver.CreateId = "admin";
+                adver.CreateId = username;
                 var id = _context.Advertisements!.Add(adver);
                 await _context.SaveChangesAsync();
                 return adver.Id;
@@ -58,7 +58,8 @@ namespace WebDongTrung.Repositories.Advertisment
 
         public async Task<IEnumerable<Advertisement>> GetAllAdvertisAsync()
         {
-            return await _context.Advertisements!.ToListAsync();
+            var advertisements = await _context.Advertisements!.ToListAsync();
+            return _mapper.Map<IEnumerable<Advertisement>>(advertisements);
         }
 
         public async Task<Advertisement> GetAdvertisAsync(int id)
@@ -67,7 +68,7 @@ namespace WebDongTrung.Repositories.Advertisment
             return _mapper.Map<Advertisement>(adver);
         }
 
-        public async Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel)
+        public async Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel, string? username)
         {
             try
             {
@@ -84,7 +85,7 @@ namespace WebDongTrung.Repositories.Advertisment
                 }
                 adver.Id = id;
                 adver.UpdateAt = DateTime.Now;
-                adver.UpdateId = "nguyenpv";
+                adver.UpdateId = username;
                 _context.Advertisements!.Update(adver);
                 await _context.SaveChangesAsync();
             }

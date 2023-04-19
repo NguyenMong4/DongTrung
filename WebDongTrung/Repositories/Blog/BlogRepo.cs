@@ -18,7 +18,7 @@ namespace WebDongTrung.Repositories
             _env = env;
         }
 
-        public async Task<int> AddBlogAsync(BlogModel blogModel)
+        public async Task<int> AddBlogAsync(BlogModel blogModel, string? username)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace WebDongTrung.Repositories
                     fs.Close();
                 }
                 newBlog.CreateAt = DateTime.Now;
-                newBlog.CreateId = "admin";
+                newBlog.CreateId = username;
                 _context.Blogs!.Add(newBlog);
                 await _context.SaveChangesAsync();
                 return newBlog.Id;
@@ -67,7 +67,7 @@ namespace WebDongTrung.Repositories
             return _mapper.Map<Blog>(blog);
         }
 
-        public async Task UpdateBlogAsync(int id, BlogModel blogModel)
+        public async Task UpdateBlogAsync(int id, BlogModel blogModel, string? username)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace WebDongTrung.Repositories
                     fs.Close();
                 }
                 blog.UpdateAt = DateTime.Now;
-                blog.UpdateId = "admin";
+                blog.UpdateId = username;
                 _context.Blogs!.Update(blog);
                 await _context.SaveChangesAsync();
             }

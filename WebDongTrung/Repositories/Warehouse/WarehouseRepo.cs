@@ -17,7 +17,7 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string> AddWarehouseAsync(CreateWareHouseDto newWarehouse)
+        public async Task<string> AddWarehouseAsync(CreateWareHouseDto newWarehouse, string? username)
         {
             try
             {
@@ -25,6 +25,7 @@ namespace WebDongTrung.Repositories
                 var impBill = _mapper.Map<ImportBill>(newWarehouse);
                 impBill.Id = id;
                 impBill.CreateAt = DateTime.Now;
+                impBill.CreateId = username;
                 _contex.ImportBills!.Add(impBill);
                 foreach (var item in newWarehouse.ProductWarehouses)
                 {
@@ -79,15 +80,15 @@ namespace WebDongTrung.Repositories
                 .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
                 .Join(_contex.Products!, w => w.WareHouse.IdProduct, p => p.Id, (w, p) => new { Prod = p, Import = w })
                 .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
-
-
             return _mapper.Map<WarehouseModel>(warehouse);
         }
 
-        public async Task UpdateWarehouseAsync(string id, WarehouseModel warehouseModel)
+        public async Task UpdateWarehouseAsync(string id, WarehouseModel warehouseModel, string? username)
         {
             warehouseModel.Id = id;
             var impBill = _mapper.Map<ImportBill>(warehouseModel);
+            impBill.UpdateAt = DateTime.Now;
+            impBill.UpdateId = username;
             var warehouse = _mapper.Map<Warehouse>(warehouseModel);
             _contex.ImportBills!.Update(impBill);
             _contex.Warehouses!.Update(warehouse);

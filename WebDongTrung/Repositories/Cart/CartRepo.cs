@@ -17,10 +17,10 @@ namespace WebDongTrung.Repositories
             _contex = contex;
             _mapper = mapper;
         }
-        public async Task<int> AddCartAsync(CartCreateDto cartCreate)
+        public async Task<int> AddCartAsync(CartCreateDto cartCreate, string? username)
         {
             var cart = _mapper.Map<Cart>(cartCreate);
-            cart.CreateId = "admin";
+            cart.CreateId = username;
             cart.CreateAt = DateTime.Now;
             await _contex.Carts!.AddAsync(cart);
             await _contex.SaveChangesAsync();
@@ -29,7 +29,7 @@ namespace WebDongTrung.Repositories
             {
                 var cartDetail = _mapper.Map<CartDetail>(item);
                 cartDetail.IdCart = idCart;
-                cartDetail.CreateId = "admin";
+                cartDetail.CreateId = username;
                 cartDetail.CreateAt = DateTime.Now;
                 await _contex.CartDetails!.AddAsync(cartDetail);
             }
@@ -66,6 +66,8 @@ namespace WebDongTrung.Repositories
                 Id = p.Id,
                 TotalPrice = p.TotalPrice,
                 Status = p.Status,
+                Phone = p.Phone,
+                Email = p.Email,
                 Address = p.Address,
                 Payment = p.Payment,
                 PersonName = p.PersonName,
@@ -78,11 +80,12 @@ namespace WebDongTrung.Repositories
             return await _contex.Carts!.FindAsync(id);
         }
 
-        public async Task UpDateCartAsync(int id, CartModel cartModel)
+        public async Task UpDateCartAsync(int id, CartCreateDto cartModel, string? username)
         {
-            cartModel.Id = id;
             var cart = _mapper.Map<Cart>(cartModel);
+            cart.Id = id;
             cart.UpdateAt = DateTime.Now;
+            cart.UpdateId = username;
             _contex.Carts!.Update(cart);
             foreach (var item in cartModel.CartDetailModel)
             {

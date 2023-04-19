@@ -1,7 +1,6 @@
 using WebDongTrung.Models;
 using WebDongTrung.Datas;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using WebDongTrung.DTO.Product;
 
 namespace WebDongTrung.Repositories
@@ -67,7 +66,7 @@ namespace WebDongTrung.Repositories
             return result.ToList();
         }
 
-        public async Task<int> AddProductAsync(ProductCreateDto productCreate)
+        public async Task<int> AddProductAsync(ProductCreateDto productCreate, string? username)
         {
             try
             {
@@ -83,7 +82,7 @@ namespace WebDongTrung.Repositories
                     fs.Close();
                 }
                 product.CreateAt = DateTime.Now;
-                product.CreateId = "addmin";
+                product.CreateId = username;
                 _contex.Products!.Add(product);
                 await _contex.SaveChangesAsync();
                 return product.Id;
@@ -110,7 +109,7 @@ namespace WebDongTrung.Repositories
             return _mapper.Map<Product>(product);
         }
 
-        public async Task UpdateProductAsync(int id, ProductCreateDto productUpdate)
+        public async Task UpdateProductAsync(int id, ProductCreateDto productUpdate, string? username)
         {
             try
             {
@@ -126,7 +125,7 @@ namespace WebDongTrung.Repositories
                 }
                 product.Id = id;
                 product.UpdateAt = DateTime.Now;
-                product.UpdateId = "nguyenpv";
+                product.UpdateId = username;
                 _contex.Products!.Update(product);
                 await _contex.SaveChangesAsync();
             }

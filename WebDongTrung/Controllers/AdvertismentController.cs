@@ -40,7 +40,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                var newadvertis = await _advertis.AddAdvertisAsync(advertis);
+                var username = Request.Cookies["CookieUserName"];
+                var newadvertis = await _advertis.AddAdvertisAsync(advertis, username);
                 var ad = await _advertis.GetAdvertisAsync(newadvertis!);
                 return ad == null ? NotFound() : Ok(ad);
             }
@@ -56,7 +57,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                await _advertis.UpdateAdvertisAsync(id, advertis);
+                var username = Request.Cookies["CookieUserName"];
+                await _advertis.UpdateAdvertisAsync(id, advertis, username);
                 return Ok();
             }
             catch

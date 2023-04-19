@@ -17,20 +17,15 @@ namespace WebDongTrung.Controllers
     {
         public IConfiguration _config = null!;
         public IEmployees _employee;
-        public AuthenticationResponse _authenticationResponse;
-        public UserInfo _userInfo;
         public AccountController(IConfiguration config, IEmployees employee )
         {
             _config = config;
             _employee = employee;
-            // _authenticationResponse = authenticationResponse;
-            // _userInfo = userInfo;
         }
         public string url = "http://localhost:8080";
         [HttpPost]
         public async Task<JsonResult> Login([FromBody] LoginModel loginModel)
         {
-           // _authenticationResponse = new();
             HttpClient clien = new();
             var content = new FormUrlEncodedContent(new[]{
                 new KeyValuePair<string, string>("client_id", _config["KeyCloak:client_id"]),
@@ -46,28 +41,13 @@ namespace WebDongTrung.Controllers
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = false,
-            }); 
+            });
             Response.Cookies.Append("CookieUserName",userName,new CookieOptions(){
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = false,
-            }); 
+            });
             return new JsonResult(authenticationResponse);
-        }
-        [HttpGet("getusername")]
-        public async Task<string> GetUserName()
-        {
-            _userInfo = new UserInfo();
-            var token = new KeycloakServiceAccount(url, _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
-            var userId = new JwtSecurityToken(_authenticationResponse.access_token).Subject;
-            HttpClient client = new();
-            client.DefaultRequestHeaders.Remove("Accept");
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
-            client.DefaultRequestHeaders.Remove("Authorization");
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
-            var respon = await client.GetAsync($"{url}/admin/realms/master/users/{userId}");
-            _userInfo = JsonSerializer.Deserialize<UserInfo>(await respon.Content.ReadAsStringAsync());
-            return _userInfo.Username;
         }
 
         [HttpPost("create")]

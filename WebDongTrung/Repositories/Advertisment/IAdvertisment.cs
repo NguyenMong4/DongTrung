@@ -11,8 +11,8 @@ namespace WebDongTrung.Repositories.Advertisment
     {
         public Task<IEnumerable<Advertisement>> GetAllAdvertisAsync();
         public Task<Advertisement> GetAdvertisAsync(int id);
-        public Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel);
-        public Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel);
+        public Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel, string? username);
+        public Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel, string? username);
         public Task DeleteAdvertisAsync(int id);
     }
 }

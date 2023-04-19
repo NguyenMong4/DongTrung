@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebDongTrung.Datas;
+using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
 namespace WebDongTrung.Controllers
@@ -39,11 +35,12 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProductType(ProductType productType)
+        public async Task<ActionResult> AddProductType(ProductTypeModel productType)
         {
             try
             {
-                var newProductType = await _productType.AddProductTypeAsync(productType);
+                var username = Request.Cookies["CookieUserName"];
+                var newProductType = await _productType.AddProductTypeAsync(productType, username);
                 var pdt = await _productType.GetProductTypeAsync(newProductType!);
                 return pdt == null ? NotFound() : Ok(pdt);
             }
@@ -54,12 +51,12 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProductType(int id, ProductType productType)
+        public async Task<IActionResult> UpdateProductType(int id, ProductTypeModel productType)
         {
             try
             {
                 var username = Request.Cookies["CookieUserName"];
-                await _productType.UpdateProductTypeAsync(id, productType);
+                await _productType.UpdateProductTypeAsync(id, productType, username);
                 return Ok();
             }
             catch

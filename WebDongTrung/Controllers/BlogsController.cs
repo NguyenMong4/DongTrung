@@ -88,7 +88,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                var newBlog = await _blog.AddBlogAsync(blogModel);
+                var username = Request.Cookies["CookieUserName"];
+                var newBlog = await _blog.AddBlogAsync(blogModel, username);
                 var blg = await _blog.GetBlogAsync(newBlog!);
                 return blg == null ? NotFound() : Ok(blg);
             }
@@ -104,7 +105,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                await _blog.UpdateBlogAsync(id, blogModel);
+                var username = Request.Cookies["CookieUserName"];
+                await _blog.UpdateBlogAsync(id, blogModel, username);
                 return Ok();
             }
             catch

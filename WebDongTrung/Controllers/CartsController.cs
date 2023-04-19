@@ -44,7 +44,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                var newCart = await _cart.AddCartAsync(cart);
+                var username = Request.Cookies["CookieUserName"];
+                var newCart = await _cart.AddCartAsync(cart, username);
                 var cartnew = await _cart.GetCartAsync(newCart);
                 return cartnew != null ? Ok(cartnew) : NotFound();
             }
@@ -55,11 +56,12 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCart(int id, CartModel cart)
+        public async Task<IActionResult> UpdateCart(int id, CartCreateDto cart)
         {
             try
             {
-                await _cart.UpDateCartAsync(id, cart);
+                var username = Request.Cookies["CookieUserName"];
+                await _cart.UpDateCartAsync(id, cart, username);
                 return Ok();
             }
             catch

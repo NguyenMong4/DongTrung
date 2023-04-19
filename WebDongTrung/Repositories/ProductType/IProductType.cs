@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -10,8 +7,8 @@ namespace WebDongTrung.Repositories
     {
         public Task<IEnumerable<ProductType>> GetAllProductTypeAsync();
         public Task<ProductType> GetProductTypeAsync(int id);
-        public Task<int> AddProductTypeAsync(ProductType productType);
-        public Task UpdateProductTypeAsync(int id, ProductType productType);
+        public Task<int> AddProductTypeAsync(ProductTypeModel productTypeModel, string? username);
+        public Task UpdateProductTypeAsync(int id, ProductTypeModel productTypeModel, string? username);
         public Task DeleteProductTypeAsync(int id);
     }
 }

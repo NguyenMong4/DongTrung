@@ -50,7 +50,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                var newProduct = await _product.AddProductAsync(productModel);
+                var username = Request.Cookies["CookieUserName"];
+                var newProduct = await _product.AddProductAsync(productModel,username);
                 var product = await _product.GetProductAsync(newProduct);
                 return product == null ? NotFound() : Ok(product);
             }
@@ -66,7 +67,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                await _product.UpdateProductAsync(id, productModel);
+                var username = Request.Cookies["CookieUserName"];
+                await _product.UpdateProductAsync(id, productModel, username);
                 return Ok();
             }
             catch

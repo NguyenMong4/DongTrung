@@ -39,7 +39,8 @@ namespace WebDongTrung.Controllers
         [HttpPost]
         public async Task<ActionResult> AddWarehouse(CreateWareHouseDto newWarehouse)
         {
-            var warehouse = await _warehouse.AddWarehouseAsync(newWarehouse);
+            var username = Request.Cookies["CookieUserName"];
+            var warehouse = await _warehouse.AddWarehouseAsync(newWarehouse, username);
             var wareh = await _warehouse.GetWarehouseAsync(warehouse);
             return wareh == null ? NotFound() : Ok(wareh);
         }
@@ -49,7 +50,8 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                await _warehouse.UpdateWarehouseAsync(id, warehouseModel);
+                var username = Request.Cookies["CookieUserName"];
+                await _warehouse.UpdateWarehouseAsync(id, warehouseModel, username);
                 return Ok();
             }
             catch

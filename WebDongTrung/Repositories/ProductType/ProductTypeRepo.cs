@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -19,13 +16,11 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<int> AddProductTypeAsync(ProductType productType)
+        public async Task<int> AddProductTypeAsync(ProductTypeModel productTypeModel, string? username)
         {
-            var newProductType = _mapper.Map<ProductType>(productType);
+            var newProductType = _mapper.Map<ProductType>(productTypeModel);
             newProductType.CreateAt = DateTime.Now;
-            newProductType.CreateId = "admin";
-            newProductType.UpdateAt = DateTime.Now;
-            newProductType.UpdateId = "admin";
+            newProductType.CreateId = username;
             _contex.ProductTypes!.Add(newProductType);
             await _contex.SaveChangesAsync();
             return newProductType.Id;
@@ -53,12 +48,12 @@ namespace WebDongTrung.Repositories
             return _mapper.Map<ProductType>(productType);
         }
 
-        public async Task UpdateProductTypeAsync(int id, ProductType productType)
+        public async Task UpdateProductTypeAsync(int id, ProductTypeModel productTypeModel, string? username)
         {
-            productType.Id = id;
-            var productTypes = _mapper.Map<ProductType>(productType);
+            var productTypes = _mapper.Map<ProductType>(productTypeModel);
+            productTypes.Id = id;
             productTypes.UpdateAt = DateTime.Now;
-            productType.UpdateId = "nguyenpv";
+            productTypes.UpdateId = username;
             _contex.ProductTypes!.Update(productTypes);
             await _contex.SaveChangesAsync();
         }
