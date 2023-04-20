@@ -58,7 +58,7 @@ namespace WebDongTrung.Controllers
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
             client.DefaultRequestHeaders.Remove("Authorization");
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", token);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization","Bearer " + token);
             HttpRequestMessage requestMessage = new()
             {
                 Method = HttpMethod.Post,
