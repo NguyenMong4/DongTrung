@@ -19,7 +19,7 @@ namespace WebDongTrung.Repositories
             _env = env;
         }
 
-        public List<ProductModel> GetAllProduct(string? search, string? sortBy, int? productType, int? page = 1)
+        public List<Product> GetAllProduct(string? search, string? sortBy, int? productType, int? page = 1)
         {
             var allProduct = _contex.Products!.AsQueryable();
             //searching
@@ -53,19 +53,19 @@ namespace WebDongTrung.Repositories
             if (page != null)
                 allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
 
-            var result = allProduct.Select(p => new ProductModel
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Price = p.Price,
-                Discount = p.Discount,
-                Photo = p.Photo,
-                ProductTypeId = p.ProductTypeId,
-                RealityQuantity = p.RealityQuantity,
-                SystemQuantity = p.SystemQuantity
-            });
+            // var result = allProduct.Select(p => new ProductModel
+            // {
+            //     Id = p.Id,
+            //     Name = p.Name,
+            //     Price = p.Price,
+            //     Discount = p.Discount,
+            //     Photo = p.Photo,
+            //     ProductTypeId = p.ProductTypeId,
+            //     RealityQuantity = p.RealityQuantity,
+            //     SystemQuantity = p.SystemQuantity
+            // });
 
-            return result.ToList();
+            return allProduct.ToList();
         }
 
         public async Task<int> AddProductAsync(ProductCreateDto productCreate, string? username)
