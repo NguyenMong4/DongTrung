@@ -2,6 +2,7 @@ using AutoMapper;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
 using WebDongTrung.DTO.Product;
+using WebDongTrung.DTO.WareHouseDto;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Helper
@@ -22,6 +23,7 @@ namespace WebDongTrung.Helper
             CreateMap<List<object>, WarehouseModel>().ReverseMap();
             CreateMap<Warehouse, WarehouseModel>().ReverseMap();
             CreateMap<ImportBill, WarehouseModel>().ReverseMap();
+            CreateMap<ImportBill, CreateWareHouseDto>().ReverseMap();
             CreateMap<Advertisement, AdvertisementModel>().ReverseMap();
             CreateMap<Blog, BlogModel>().ReverseMap();
         }

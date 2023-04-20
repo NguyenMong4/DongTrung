@@ -7,10 +7,12 @@ namespace WebDongTrung.Datas
     {
         [Key]
         [Column(Order = 1)]
-        public string IdBill { get; set; } = null!;
+        public string BillId { get; set; } = null!;
+        public virtual ImportBill? Bill {get;set;}
         [Key]
         [Column(Order = 2)]
-        public int IdProduct { get; set; }
+        public int ProductId { get; set; }
+        public virtual Product? Product { get; set; }
         public int ImportQuantity { get; set; }
         public int? ImportPrice { get; set; }
     }
