@@ -34,6 +34,13 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("grant_type", "password")
             });
             var respon = await clien.PostAsync($"{_config["KeyCloak:url"]}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
+            if(!respon.IsSuccessStatusCode){
+                switch(respon!.StatusCode){
+                    case System.Net.HttpStatusCode.Unauthorized:
+                    Response.StatusCode = (int)respon.StatusCode;
+                    return new JsonResult(null);
+                }
+            }
             var authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
             var userName =  new JwtSecurityToken(authenticationResponse.access_token).Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
             Response.Cookies.Append("CookieAccestoken",authenticationResponse.access_token,new CookieOptions(){
