@@ -60,7 +60,9 @@ namespace WebDongTrung.Repositories
                 Price = p.Price,
                 Discount = p.Discount,
                 Photo = p.Photo,
-                ProductTypeId = p.ProductTypeId
+                ProductTypeId = p.ProductTypeId,
+                RealityQuantity = p.RealityQuantity,
+                SystemQuantity = p.SystemQuantity
             });
 
             return result.ToList();
