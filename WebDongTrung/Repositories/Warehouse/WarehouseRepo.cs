@@ -76,10 +76,14 @@ namespace WebDongTrung.Repositories
 
         public async Task<WarehouseModel> GetWarehouseAsync(string id)
         {
-            var warehouse = _contex.ImportBills!
-                .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
-                .Join(_contex.Products!, w => w.WareHouse.IdProduct, p => p.Id, (w, p) => new { Prod = p, Import = w })
-                .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
+            // var warehouse = _contex.ImportBills!
+            //     .Join(_contex.Warehouses!, bill => bill.Id, wareh => wareh.IdBill, (bill, wareh) => new { Bill = bill, WareHouse = wareh })
+            //     .Join(_contex.Products!, w => w.WareHouse.IdProduct, p => p.Id, (w, p) => new { Prod = p, Import = w })
+            //     .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
+            var warehouse = await _contex.Warehouses!.AsNoTracking()
+                .Where(x => x.IdBill == id)
+                .Include(x => x.Product).Include(x => x.Bill).ToListAsync();
+
             return _mapper.Map<WarehouseModel>(warehouse);
         }
 
