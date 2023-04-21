@@ -55,7 +55,7 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public async Task<IEnumerable<Blog>> GetAllBlogAsync(int type)
+        public async Task<IEnumerable<Blog>> GetAllBlogAsync(int? type)
         {
             var blogs = await _context.Blogs!.Where(blog => blog.Type == type).ToListAsync();
             return _mapper.Map<IEnumerable<Blog>>(blogs);

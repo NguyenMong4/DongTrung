@@ -23,51 +23,12 @@ namespace WebDongTrung.Controllers
         // Type = 1 : blog
         // = 2 : about
         // = 3 : chuong trinh khuyen mai
-        [HttpGet("Blogs")]
-        public async Task<IActionResult> GetAllBlogs()
+        [HttpGet]
+        public async Task<IActionResult> GetAllBlogs(int? type)
         {
             try
             {
-                return Ok(await _blog.GetAllBlogAsync(1));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("About")]
-        public async Task<IActionResult> GetAbout()
-        {
-            try
-            {
-                return Ok(await _blog.GetAllBlogAsync(2));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("Discount")]
-        public async Task<IActionResult> GetAllDiscount()
-        {
-            try
-            {
-                return Ok(await _blog.GetAllBlogAsync(3));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("UserManual")]
-        public async Task<IActionResult> GetAllUserManual()
-        {
-            try
-            {
-                return Ok(await _blog.GetAllBlogAsync(4));
+                return Ok(await _blog.GetAllBlogAsync(type));
             }
             catch
             {
