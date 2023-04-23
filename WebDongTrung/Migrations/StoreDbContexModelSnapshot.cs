@@ -225,9 +225,9 @@ namespace WebDongTrung.Migrations
 
             modelBuilder.Entity("WebDongTrung.Datas.Employee", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .HasMaxLength(200)
@@ -247,6 +247,10 @@ namespace WebDongTrung.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PassWord")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Phone")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
@@ -259,6 +263,7 @@ namespace WebDongTrung.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -414,11 +419,11 @@ namespace WebDongTrung.Migrations
 
             modelBuilder.Entity("WebDongTrung.Datas.Warehouse", b =>
                 {
-                    b.Property<string>("IdBill")
+                    b.Property<string>("BillId")
                         .HasColumnType("varchar(255)")
                         .HasColumnOrder(1);
 
-                    b.Property<int>("IdProduct")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnOrder(2);
 
@@ -428,7 +433,9 @@ namespace WebDongTrung.Migrations
                     b.Property<int>("ImportQuantity")
                         .HasColumnType("int");
 
-                    b.HasKey("IdBill", "IdProduct");
+                    b.HasKey("BillId", "ProductId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Warehouses");
                 });
@@ -446,6 +453,25 @@ namespace WebDongTrung.Migrations
                         .IsRequired();
 
                     b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebDongTrung.Datas.Warehouse", b =>
+                {
+                    b.HasOne("WebDongTrung.Datas.ImportBill", "Bill")
+                        .WithMany()
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebDongTrung.Datas.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
 
                     b.Navigation("Product");
                 });

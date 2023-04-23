@@ -16,10 +16,11 @@ namespace WebDongTrung.Repositories
             _mapper = mapper;
         }
 
-        public async Task<string?> AddEmployeeAsync(EmployeeModel employee, string id)
+        public async Task<int?> AddEmployeeAsync(EmployeeModel employee)
         {
             var emp = _mapper.Map<Employee>(employee);
-            emp.Id = id;
+            emp.CreateAt = DateTime.Now;
+            //emp.CreateId = "";
             await _contex.Employees!.AddAsync(emp);
             await _contex.SaveChangesAsync();
             return emp.Id;
@@ -54,6 +55,15 @@ namespace WebDongTrung.Repositories
                 _contex.Employees!.Update(emp);
                 await _contex.SaveChangesAsync();
             }
+        }
+        public string CheckLogin(LoginModel loginModel)
+        {
+            //var emp = _mapper.Map<Employee>(loginModel);
+            var result = _contex.Employees!.Where(emp => emp.UserName.Equals(loginModel.Username) && emp.PassWord.Equals(loginModel.Password)).FirstOrDefault();
+            if (result != null)
+                return result.UserName;
+            else
+                return string.Empty;
         }
     }
 }

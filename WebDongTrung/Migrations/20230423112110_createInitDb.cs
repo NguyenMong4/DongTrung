@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebDongTrung.Migrations
 {
-    public partial class createDB : Migration
+    public partial class createInitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,6 +24,8 @@ namespace WebDongTrung.Migrations
                     Position = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -49,6 +51,8 @@ namespace WebDongTrung.Migrations
                     Content = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Type = table.Column<int>(type: "int", nullable: true),
+                    Photo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -120,9 +124,11 @@ namespace WebDongTrung.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserName = table.Column<string>(type: "longtext", nullable: true)
+                    PassWord = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Phone = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -130,7 +136,7 @@ namespace WebDongTrung.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Group = table.Column<string>(type: "longtext", nullable: true)
+                    FullName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -142,6 +148,27 @@ namespace WebDongTrung.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ImportBills",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Import_date = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Total_price = table.Column<int>(type: "int", nullable: true),
+                    CreateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreateAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdateAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImportBills", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -222,30 +249,6 @@ namespace WebDongTrung.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Warehouses",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdProduct = table.Column<int>(type: "int", nullable: false),
-                    ImportQuantity = table.Column<int>(type: "int", nullable: false),
-                    ImportPrice = table.Column<int>(type: "int", nullable: true),
-                    RealityQuantity = table.Column<int>(type: "int", nullable: true),
-                    SystemQuantity = table.Column<int>(type: "int", nullable: true),
-                    CreateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreateAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdateId = table.Column<string>(type: "varchar(12)", maxLength: 12, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UpdateAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Warehouses", x => new { x.Id, x.IdProduct });
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "CartDetails",
                 columns: table => new
                 {
@@ -280,6 +283,34 @@ namespace WebDongTrung.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Warehouses",
+                columns: table => new
+                {
+                    BillId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ImportQuantity = table.Column<int>(type: "int", nullable: false),
+                    ImportPrice = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouses", x => new { x.BillId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_Warehouses_ImportBills_BillId",
+                        column: x => x.BillId,
+                        principalTable: "ImportBills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Warehouses_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_CartDetails_CartId",
                 table: "CartDetails",
@@ -289,6 +320,11 @@ namespace WebDongTrung.Migrations
                 name: "IX_CartDetails_IdProduct",
                 table: "CartDetails",
                 column: "IdProduct");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Warehouses_ProductId",
+                table: "Warehouses",
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -319,6 +355,9 @@ namespace WebDongTrung.Migrations
 
             migrationBuilder.DropTable(
                 name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "ImportBills");
 
             migrationBuilder.DropTable(
                 name: "Products");

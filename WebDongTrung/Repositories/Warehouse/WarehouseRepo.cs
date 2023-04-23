@@ -34,8 +34,8 @@ namespace WebDongTrung.Repositories
                     {
                         Warehouse wh = new()
                         {
-                            IdBill = id,
-                            IdProduct = item.IdProduct,
+                            BillId = id,
+                            ProductId = item.IdProduct,
                             ImportPrice = item.ImportPrice,
                             ImportQuantity = item.ImportQuantity,
                         };
@@ -56,7 +56,7 @@ namespace WebDongTrung.Repositories
 
         public async Task DeleteWarehouseAsync(string id)
         {
-            var warehouse = _contex.Warehouses!.SingleOrDefault(e => e.IdBill == id);
+            var warehouse = _contex.Warehouses!.SingleOrDefault(e => e.BillId == id);
             var bill = _contex.ImportBills!.SingleOrDefault(e => e.Id == id);
             if (warehouse != null && bill != null)
             {
@@ -81,7 +81,7 @@ namespace WebDongTrung.Repositories
             //     .Join(_contex.Products!, w => w.WareHouse.IdProduct, p => p.Id, (w, p) => new { Prod = p, Import = w })
             //     .Where(x => x.Import.Bill.Id.Contains(id)).ToList();
             var warehouse = await _contex.Warehouses!.AsNoTracking()
-                .Where(x => x.IdBill == id)
+                .Where(x => x.BillId == id)
                 .Include(x => x.Product).Include(x => x.Bill).ToListAsync();
 
             return _mapper.Map<WarehouseModel>(warehouse);

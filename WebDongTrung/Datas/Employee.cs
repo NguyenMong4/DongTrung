@@ -11,9 +11,10 @@ namespace WebDongTrung.Datas
     public class Employee : SystemProperties
     {
         [Key]
-        [MaxLength(100)]
-        public string Id { get; set; } = null!;
-        public string? UserName { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string UserName { get; set; } = null!;
+        public string PassWord { get; set; } = null!;
         [MaxLength(10)]
         public string? Phone { get; set; }
         [MaxLength(200)]

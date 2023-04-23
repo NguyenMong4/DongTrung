@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebDongTrung.Datas;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
 
@@ -19,18 +14,37 @@ namespace WebDongTrung.Controllers
         {
             _employee = employee;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllEmployee()
+        [HttpPost("Login")]
+        public IActionResult CheckLogin(LoginModel loginModel)
         {
-            try
+
+            var userName =  _employee.CheckLogin(loginModel);
+            if (!string.IsNullOrEmpty(userName))
             {
-                return Ok(await _employee.GetAllEmployeeAsync());
+                Response.Cookies.Append("CookieUserName", userName, new CookieOptions()
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = false,
+                });
+                return Ok();
             }
-            catch
-            {
-                return BadRequest();
-            }
+            
+           return NotFound();
+
         }
+        // [HttpGet]
+        // public async Task<IActionResult> GetAllEmployee()
+        // {
+        //     try
+        //     {
+        //         return Ok(await _employee.GetAllEmployeeAsync());
+        //     }
+        //     catch
+        //     {
+        //         return BadRequest();
+        //     }
+        // }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee(string id)

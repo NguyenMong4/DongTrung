@@ -10,6 +10,7 @@ namespace WebDongTrung.Models
     public class EmployeeModel
     {
         public string? UserName { get; set; }
+        public string? PassWord { get; set; }
         [MaxLength(10)]
         public string? Phone { get; set; }
         [MaxLength(200)]
@@ -17,6 +18,5 @@ namespace WebDongTrung.Models
         [MaxLength(200)]
         public string? Address { get; set; }
         public string? FullName { get; set; }
-        public string? PassWord {get;set;}
     }
 }

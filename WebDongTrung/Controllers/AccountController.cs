@@ -93,7 +93,7 @@ namespace WebDongTrung.Controllers
             {
                 string id = userM[0].id;
                 //create in database
-                await _employee.AddEmployeeAsync(employee, id);
+                //await _employee.AddEmployeeAsync(employee, id);
             }
 
             if (respone.IsSuccessStatusCode)
