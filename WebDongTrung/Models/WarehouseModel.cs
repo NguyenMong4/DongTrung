@@ -2,7 +2,7 @@ using WebDongTrung.Datas;
 
 namespace WebDongTrung.Models
 {
-    public class WarehouseModel : SystemProperties
+    public class ImportBillModel : SystemProperties
     {
         public string? Id { get; set; }
         public DateTime? Import_date { get; set; }

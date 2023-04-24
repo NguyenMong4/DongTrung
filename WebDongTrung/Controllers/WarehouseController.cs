@@ -46,7 +46,7 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateWarehouse(string id, WarehouseModel warehouseModel)
+        public async Task<IActionResult> UpdateWarehouse(string id, ImportBillModel warehouseModel)
         {
             try
             {

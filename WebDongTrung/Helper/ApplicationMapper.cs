@@ -20,9 +20,9 @@ namespace WebDongTrung.Helper
             CreateMap<CartDetail, CartDetails>().ReverseMap();
             CreateMap<Employee, EmployeeModel>().ReverseMap();
             CreateMap<List<object>, CartDetailModel>().ReverseMap();
-            CreateMap<List<object>, WarehouseModel>().ReverseMap();
-            CreateMap<Warehouse, WarehouseModel>().ReverseMap();
-            CreateMap<ImportBill, WarehouseModel>().ReverseMap();
+            CreateMap<List<object>, ImportBillModel>().ReverseMap();
+            CreateMap<Warehouse, ImportBillModel>().ReverseMap();
+            CreateMap<ImportBill, ImportBillModel>().ReverseMap();
             CreateMap<ImportBill, CreateWareHouseDto>().ReverseMap();
             CreateMap<Advertisement, AdvertisementModel>().ReverseMap();
             CreateMap<Blog, BlogModel>().ReverseMap();
