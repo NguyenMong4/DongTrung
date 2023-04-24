@@ -69,5 +69,19 @@ namespace WebDongTrung.Controllers
                 return BadRequest();
             }
         }
+        [HttpPatch]
+         public async Task<IActionResult> UpdateStatusCart(UpdateStatusDto updateStatusDto)
+        {
+            try
+            {
+                var username = Request.Cookies["CookieUserName"];
+                await _cart.UpdateStatusAsync(updateStatusDto, username);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
@@ -71,6 +70,7 @@ namespace WebDongTrung.Repositories
                 Address = p.Address,
                 Payment = p.Payment,
                 PersonName = p.PersonName,
+                ReceivedDate = p.ReceivedDate
             });
             return result.ToList();
         }
@@ -97,7 +97,7 @@ namespace WebDongTrung.Repositories
                         item.Quantity += item.Quantity / product.Discount;
                     }
 
-                    if (cart.Status == 1) //trạng thái : đang giao hàng
+                    if (cart.Status == 4) //trạng thái : đang giao hàng
                     {
                         product.RealityQuantity -= item.Quantity;
                     }
@@ -112,6 +112,13 @@ namespace WebDongTrung.Repositories
                     _contex.Products!.Update(product);
                 }
             }
+            await _contex.SaveChangesAsync();
+        }
+        public async Task UpdateStatusAsync(UpdateStatusDto statusDto, string? userName){
+            var crt = _mapper.Map<Cart>(statusDto);
+            crt.UpdateId = userName;
+            crt.UpdateAt = DateTime.Now;
+            _contex.Carts!.Update(crt);
             await _contex.SaveChangesAsync();
         }
     }

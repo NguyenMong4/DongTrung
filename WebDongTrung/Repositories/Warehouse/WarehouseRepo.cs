@@ -87,7 +87,7 @@ public class WarehouseRepo : IWarehouse
             Total_price = warehouse[0].Total_price,
             ProductWarehouses = warehouse[0].Warehouses.Select(x => new ProductWarehouseModel
             {
-                IdProduct = x.ProductId,
+                ProductId = x.ProductId,
                 NameProduct = x.Product!.Name,
                 ImportPrice = x.ImportPrice,
                 ImportQuantity = x.ImportQuantity
@@ -101,9 +101,13 @@ public class WarehouseRepo : IWarehouse
         var impBill = _mapper.Map<ImportBill>(warehouseModel);
         impBill.UpdateAt = DateTime.Now;
         impBill.UpdateId = username;
-        var warehouse = _mapper.Map<Warehouse>(warehouseModel);
         _contex.ImportBills!.Update(impBill);
-        _contex.Warehouses!.Update(warehouse);
+        foreach (var item in warehouseModel.ProductWarehouses)
+        {
+            var warehouse = _mapper.Map<Warehouse>(item);
+            warehouse.BillId = id;
+            _contex.Warehouses!.Update(warehouse);
+        }
         await _contex.SaveChangesAsync();
     }
 }
