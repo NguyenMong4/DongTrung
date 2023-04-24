@@ -38,7 +38,7 @@ namespace WebDongTrung.Controllers
                 throw;
             }
 
-            return null;
+            return string.Empty;
         }
     }
 }
