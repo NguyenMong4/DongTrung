@@ -49,12 +49,12 @@ namespace WebDongTrung.Repositories
                 }
             }
 
-            //page
-            if (page != null)
-                allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
             int max_page = allProduct.Count() / PageSize;
             int remainder = allProduct.Count() % PageSize;
             max_page = max_page < 1 ? 1 : (remainder == 0 ? max_page : max_page + 1);
+            //page
+            if (page != null)
+                allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
             var lstProducts = new ProductGetAllDto
             {
                 MaxPage = max_page,
