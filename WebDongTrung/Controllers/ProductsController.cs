@@ -93,7 +93,7 @@ namespace WebDongTrung.Controllers
             }
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateQuantityProduct(int id, int quantity)
+        public async Task<IActionResult> UpdateQuantityProduct(int id, [FromBody] int quantity)
         {
             try
             {

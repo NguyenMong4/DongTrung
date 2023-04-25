@@ -71,7 +71,7 @@ namespace WebDongTrung.Controllers
             }
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateStatusCart(int id, string status)
+        public async Task<IActionResult> UpdateStatusCart(int id,[FromBody] string status)
         {
             try
             {
