@@ -126,7 +126,7 @@ namespace WebDongTrung.Repositories
             }
             await _contex.SaveChangesAsync();
         }
-        public async Task<Cart> UpdateStatusAsync(int id, string? userName, string status)
+        public async Task<Cart> UpdateStatusAsync(int id, string? userName, UpdateStatusDto status)
         {
             var cartQuery = await GetCartAsync(id);
             if (cartQuery == null)
@@ -140,7 +140,7 @@ namespace WebDongTrung.Repositories
             {
                 op = "replace",
                 path = "Status",
-                value = status
+                value = status.Status
             });
             cartDocument.ApplyTo(cartQuery);
             await _contex.SaveChangesAsync();

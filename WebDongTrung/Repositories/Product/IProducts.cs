@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.JsonPatch;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.DTO.Product;
 using WebDongTrung.Models;
 
@@ -13,6 +13,6 @@ namespace WebDongTrung.Repositories
         public Task DeleteProductAsync(int id);
         public Task<ProductGetAllDto> GetAllProductAsync(string? search,string? sortBy, int? productType, int? page);
         public IEnumerable<ProductModel> GetProductsDiscount();
-        public Task<Product> UpdateQuantityAsync(int id, string? userName, int quantity);
+        public Task<Product> UpdateQuantityAsync(int id, string? userName, UpdateQuantityDto updateQuantityDto);
     }
 }

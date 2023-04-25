@@ -22,7 +22,6 @@ namespace WebDongTrung.Helper
             CreateMap<List<object>, CartDetailModel>().ReverseMap();
             CreateMap<List<object>, ImportBillModel>().ReverseMap();
             CreateMap<Warehouse, ProductWarehouseModel>().ReverseMap();
-            CreateMap<Cart, UpdateStatusDto>().ReverseMap();
             CreateMap<ImportBill, ImportBillModel>().ReverseMap();
             CreateMap<ImportBill, CreateWareHouseDto>().ReverseMap();
             CreateMap<Advertisement, AdvertisementModel>().ReverseMap();

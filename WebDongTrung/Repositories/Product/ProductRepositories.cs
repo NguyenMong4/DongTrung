@@ -4,6 +4,7 @@ using AutoMapper;
 using WebDongTrung.DTO.Product;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
+using WebDongTrung.DTO.Cart;
 
 namespace WebDongTrung.Repositories
 {
@@ -161,7 +162,7 @@ namespace WebDongTrung.Repositories
             });
         }
 
-        public async Task<Product> UpdateQuantityAsync(int id, string? userName, int quantity)
+        public async Task<Product> UpdateQuantityAsync(int id, string? userName, UpdateQuantityDto updateQuantityDto)
         {
             var productQuery = await GetProductAsync(id);
             if (productQuery == null)
@@ -169,8 +170,8 @@ namespace WebDongTrung.Repositories
                 return productQuery;
             }
 
-            var sysQuantity = productQuery.SystemQuantity + quantity;
-            var realQuantity = productQuery.RealityQuantity + quantity;
+            var sysQuantity = productQuery.SystemQuantity + updateQuantityDto.Quantity;
+            var realQuantity = productQuery.RealityQuantity + updateQuantityDto.Quantity;
             JsonPatchDocument productDocument = new();
             List<Operation> opLst = new()
             {

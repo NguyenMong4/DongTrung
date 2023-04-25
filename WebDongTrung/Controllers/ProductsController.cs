@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.DTO.Product;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories;
@@ -93,12 +94,12 @@ namespace WebDongTrung.Controllers
             }
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateQuantityProduct(int id, [FromBody] int quantity)
+        public async Task<IActionResult> UpdateQuantityProduct(int id, [FromBody] UpdateQuantityDto quantityDto)
         {
             try
             {
                 var username = Request.Cookies["CookieUserName"];
-                var updateQuantity = await _product.UpdateQuantityAsync(id, username, quantity);
+                var updateQuantity = await _product.UpdateQuantityAsync(id, username, quantityDto);
                 if (updateQuantity == null)
                     return NotFound();
                 return Ok(updateQuantity);

@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.JsonPatch;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
-using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -12,6 +10,6 @@ namespace WebDongTrung.Repositories
          public Task<int> AddCartAsync(CartCreateDto cartModel, string? username);
          public Task UpDateCartAsync(int id, CartCreateDto cartModel, string? username);
          public Task DeleteCartAsync(int id);
-         public Task<Cart> UpdateStatusAsync(int id, string? userName, string status);
+         public Task<Cart> UpdateStatusAsync(int id, string? userName, UpdateStatusDto statusDto);
     }
 }
