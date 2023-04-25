@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
@@ -20,11 +21,11 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCarts(string? search, int? page)
+        public async Task<IActionResult> GetAllCarts(string? search, int? page)
         {
-           try
+            try
             {
-                return Ok(_cart.GetAllCart(search, page));
+                return Ok(await _cart.GetAllCartAsync(search, page));
             }
             catch
             {
@@ -69,14 +70,16 @@ namespace WebDongTrung.Controllers
                 return BadRequest();
             }
         }
-        [HttpPatch]
-         public async Task<IActionResult> UpdateStatusCart(UpdateStatusDto updateStatusDto)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateStatusCart(int id, [FromBody] JsonPatchDocument cartDocument)
         {
             try
             {
                 var username = Request.Cookies["CookieUserName"];
-                await _cart.UpdateStatusAsync(updateStatusDto, username);
-                return Ok();
+                var updateStatus = await _cart.UpdateStatusAsync(id, username, cartDocument);
+                if(updateStatus == null)
+                    return NotFound();
+                return Ok(updateStatus);
             }
             catch
             {

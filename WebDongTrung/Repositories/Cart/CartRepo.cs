@@ -1,7 +1,7 @@
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
-using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories
 {
@@ -46,7 +46,7 @@ namespace WebDongTrung.Repositories
             }
         }
 
-        public List<CartModel> GetAllCart(string? search, int? page = 1)
+        public Task<GetAllCartDto> GetAllCartAsync(string? search, int? page = 1)
         {
             var allCart = _contex.Carts!.AsQueryable();
             //searching
@@ -55,24 +55,35 @@ namespace WebDongTrung.Repositories
                 allCart = allCart.Where(p => p.Phone!.Contains(search));
             }
             allCart = allCart.OrderByDescending(p => p.CreateAt);
+
+            int totalCart = allCart.Count();
+            int max_page = totalCart / PageSize;
+            int remainder = totalCart % PageSize;
+            max_page = max_page < 1 ? 1 : (remainder == 0 ? max_page : max_page + 1);
+
             if (page != null)
             {
                 allCart = allCart.Skip((int)((page - 1) * PageSize)).Take(PageSize);
             }
 
-            var result = allCart.Select(p => new CartModel
+            var result = new GetAllCartDto
             {
-                Id = p.Id,
-                TotalPrice = p.TotalPrice,
-                Status = p.Status,
-                Phone = p.Phone,
-                Email = p.Email,
-                Address = p.Address,
-                Payment = p.Payment,
-                PersonName = p.PersonName,
-                ReceivedDate = p.ReceivedDate
-            });
-            return result.ToList();
+                MaxPage = max_page,
+                Carts = allCart.Select(p => new Cart
+                {
+                    Id = p.Id,
+                    TotalPrice = p.TotalPrice,
+                    Status = p.Status,
+                    Phone = p.Phone,
+                    Email = p.Email,
+                    Address = p.Address,
+                    Payment = p.Payment,
+                    PersonName = p.PersonName,
+                    ReceivedDate = p.ReceivedDate
+                }).ToList()
+            };
+
+            return Task.FromResult(result);
         }
 
         public async Task<Cart?> GetCartAsync(int id)
@@ -114,12 +125,18 @@ namespace WebDongTrung.Repositories
             }
             await _contex.SaveChangesAsync();
         }
-        public async Task UpdateStatusAsync(UpdateStatusDto statusDto, string? userName){
-            var crt = _mapper.Map<Cart>(statusDto);
-            crt.UpdateId = userName;
-            crt.UpdateAt = DateTime.Now;
-            _contex.Carts!.Update(crt);
+        public async Task<Cart> UpdateStatusAsync(int id, string? userName, JsonPatchDocument cartDocument)
+        {
+            var cartQuery = await GetCartAsync(id);
+            if (cartQuery == null)
+            {
+                return cartQuery;
+            }
+            cartQuery.UpdateId = userName;
+            cartQuery.UpdateAt = DateTime.Now;
+            cartDocument.ApplyTo(cartQuery);
             await _contex.SaveChangesAsync();
+            return cartQuery;
         }
     }
 }

@@ -48,9 +48,9 @@ namespace WebDongTrung.Repositories
                         break;
                 }
             }
-
-            int max_page = allProduct.Count() / PageSize;
-            int remainder = allProduct.Count() % PageSize;
+            int totalProduct = allProduct.Count();
+            int max_page = totalProduct / PageSize;
+            int remainder = totalProduct % PageSize;
             max_page = max_page < 1 ? 1 : (remainder == 0 ? max_page : max_page + 1);
             //page
             if (page != null)
@@ -58,6 +58,7 @@ namespace WebDongTrung.Repositories
             var lstProducts = new ProductGetAllDto
             {
                 MaxPage = max_page,
+                TotalProduct = totalProduct,
                 Products = allProduct.Select(p => new Product
                 {
                     Id = p.Id,
