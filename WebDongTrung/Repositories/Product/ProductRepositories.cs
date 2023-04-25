@@ -19,7 +19,7 @@ namespace WebDongTrung.Repositories
             _env = env;
         }
 
-        public List<Product> GetAllProduct(string? search, string? sortBy, int? productType, int? page = 1)
+        public Task<ProductGetAllDto> GetAllProductAsync(string? search, string? sortBy, int? productType, int? page = 1)
         {
             var allProduct = _contex.Products!.AsQueryable();
             //searching
@@ -52,20 +52,25 @@ namespace WebDongTrung.Repositories
             //page
             if (page != null)
                 allProduct = allProduct.Skip((int)((page - 1) * PageSize)).Take(PageSize);
+            var lstProducts = new ProductGetAllDto
+            {
+                MaxPage = allProduct.Count(),
+                Products = allProduct.Select(p => new Product
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Discount = p.Discount,
+                    Photo = p.Photo,
+                    ProductTypeId = p.ProductTypeId,
+                    RealityQuantity = p.RealityQuantity,
+                    SystemQuantity = p.SystemQuantity,
+                    GeneralInformation = p.GeneralInformation,
+                    Description = p.Description
+                }).ToList()
+            };
 
-            // var result = allProduct.Select(p => new ProductModel
-            // {
-            //     Id = p.Id,
-            //     Name = p.Name,
-            //     Price = p.Price,
-            //     Discount = p.Discount,
-            //     Photo = p.Photo,
-            //     ProductTypeId = p.ProductTypeId,
-            //     RealityQuantity = p.RealityQuantity,
-            //     SystemQuantity = p.SystemQuantity
-            // });
-
-            return allProduct.ToList();
+            return Task.FromResult(lstProducts);
         }
 
         public async Task<int> AddProductAsync(ProductCreateDto productCreate, string? username)
@@ -116,7 +121,8 @@ namespace WebDongTrung.Repositories
             try
             {
                 var product = _mapper.Map<Product>(productUpdate);
-                if(productUpdate.PhotoFile != null){
+                if (productUpdate.PhotoFile != null)
+                {
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
                     var filePath = Path.Combine(directory, productUpdate.PhotoFile.FileName);

@@ -21,11 +21,11 @@ namespace WebDongTrung.Controllers
             _product = product;
         }
         [HttpGet]
-        public IActionResult GetAllProduct(string? search, string? sortBy, int? productType, int? page)
+        public async Task<IActionResult> GetAllProduct(string? search, string? sortBy, int? productType, int? page)
         {
             try
             {
-                return Ok(_product.GetAllProduct(search, sortBy,productType, page));
+                return Ok(await _product.GetAllProductAsync(search, sortBy,productType, page));
             }
             catch
             {
