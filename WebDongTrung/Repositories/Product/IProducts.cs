@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Product;
 using WebDongTrung.Models;
@@ -17,6 +13,6 @@ namespace WebDongTrung.Repositories
         public Task DeleteProductAsync(int id);
         public Task<ProductGetAllDto> GetAllProductAsync(string? search,string? sortBy, int? productType, int? page);
         public IEnumerable<ProductModel> GetProductsDiscount();
-
+        public Task<Product> UpdateQuantityAsync(int id, string? userName, int quantity);
     }
 }

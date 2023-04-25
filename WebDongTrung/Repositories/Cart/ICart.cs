@@ -12,6 +12,6 @@ namespace WebDongTrung.Repositories
          public Task<int> AddCartAsync(CartCreateDto cartModel, string? username);
          public Task UpDateCartAsync(int id, CartCreateDto cartModel, string? username);
          public Task DeleteCartAsync(int id);
-         public Task<Cart> UpdateStatusAsync(int id, string? userName, JsonPatchDocument cartDocument);
+         public Task<Cart> UpdateStatusAsync(int id, string? userName, string status);
     }
 }

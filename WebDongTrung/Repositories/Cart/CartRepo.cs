@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Cart;
 
@@ -125,7 +126,7 @@ namespace WebDongTrung.Repositories
             }
             await _contex.SaveChangesAsync();
         }
-        public async Task<Cart> UpdateStatusAsync(int id, string? userName, JsonPatchDocument cartDocument)
+        public async Task<Cart> UpdateStatusAsync(int id, string? userName, string status)
         {
             var cartQuery = await GetCartAsync(id);
             if (cartQuery == null)
@@ -134,6 +135,13 @@ namespace WebDongTrung.Repositories
             }
             cartQuery.UpdateId = userName;
             cartQuery.UpdateAt = DateTime.Now;
+            JsonPatchDocument cartDocument = new();
+            cartDocument.Operations.Add(new Operation
+            {
+                op = "replace",
+                path = "Status",
+                value = status
+            });
             cartDocument.ApplyTo(cartQuery);
             await _contex.SaveChangesAsync();
             return cartQuery;

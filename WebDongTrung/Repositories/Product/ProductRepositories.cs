@@ -2,6 +2,8 @@ using WebDongTrung.Models;
 using WebDongTrung.Datas;
 using AutoMapper;
 using WebDongTrung.DTO.Product;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace WebDongTrung.Repositories
 {
@@ -157,6 +159,40 @@ namespace WebDongTrung.Repositories
                 Photo = p.Photo,
                 Discount = p.Discount
             });
+        }
+
+        public async Task<Product> UpdateQuantityAsync(int id, string? userName, int quantity)
+        {
+            var productQuery = await GetProductAsync(id);
+            if (productQuery == null)
+            {
+                return productQuery;
+            }
+
+            var sysQuantity = productQuery.SystemQuantity + quantity;
+            var realQuantity = productQuery.RealityQuantity + quantity;
+            JsonPatchDocument productDocument = new();
+            List<Operation> opLst = new()
+            {
+                new Operation
+                {
+                    op = "replace",
+                    path = "RealityQuantity",
+                    value = realQuantity
+                },
+                new Operation
+                {
+                    op = "replace",
+                    path = "SystemQuantity",
+                    value = sysQuantity
+                }
+            };
+            productDocument.Operations.AddRange(opLst);
+            productQuery.UpdateId = userName;
+            productQuery.UpdateAt = DateTime.Now;
+            productDocument.ApplyTo(productQuery);
+            await _contex.SaveChangesAsync();
+            return productQuery;
         }
     }
 }

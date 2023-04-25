@@ -71,12 +71,12 @@ namespace WebDongTrung.Controllers
             }
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateStatusCart(int id, [FromBody] JsonPatchDocument cartDocument)
+        public async Task<IActionResult> UpdateStatusCart(int id, string status)
         {
             try
             {
                 var username = Request.Cookies["CookieUserName"];
-                var updateStatus = await _cart.UpdateStatusAsync(id, username, cartDocument);
+                var updateStatus = await _cart.UpdateStatusAsync(id, username, status);
                 if(updateStatus == null)
                     return NotFound();
                 return Ok(updateStatus);

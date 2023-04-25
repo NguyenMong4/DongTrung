@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Datas;
 using WebDongTrung.DTO.Product;
@@ -25,7 +26,7 @@ namespace WebDongTrung.Controllers
         {
             try
             {
-                return Ok(await _product.GetAllProductAsync(search, sortBy,productType, page));
+                return Ok(await _product.GetAllProductAsync(search, sortBy, productType, page));
             }
             catch
             {
@@ -33,7 +34,8 @@ namespace WebDongTrung.Controllers
             }
         }
         [HttpGet("Discount")]
-        public IActionResult GetAllProductDiscount(){
+        public IActionResult GetAllProductDiscount()
+        {
             return Ok(_product.GetProductsDiscount());
         }
 
@@ -46,12 +48,12 @@ namespace WebDongTrung.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult> AddProduct([FromForm]ProductCreateDto productModel)
+        public async Task<ActionResult> AddProduct([FromForm] ProductCreateDto productModel)
         {
             try
             {
                 var username = Request.Cookies["CookieUserName"];
-                var newProduct = await _product.AddProductAsync(productModel,username);
+                var newProduct = await _product.AddProductAsync(productModel, username);
                 var product = await _product.GetProductAsync(newProduct);
                 return product == null ? NotFound() : Ok(product);
             }
@@ -62,8 +64,8 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpPut("{id}")]
-         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateProduct(int id,[FromForm] ProductCreateDto productModel)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromForm] ProductCreateDto productModel)
         {
             try
             {
@@ -84,6 +86,22 @@ namespace WebDongTrung.Controllers
             {
                 await _product.DeleteProductAsync(id);
                 return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateQuantityProduct(int id, int quantity)
+        {
+            try
+            {
+                var username = Request.Cookies["CookieUserName"];
+                var updateQuantity = await _product.UpdateQuantityAsync(id, username, quantity);
+                if (updateQuantity == null)
+                    return NotFound();
+                return Ok(updateQuantity);
             }
             catch
             {
