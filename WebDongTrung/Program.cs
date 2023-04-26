@@ -22,8 +22,8 @@ builder.Services.AddCors(option => option.AddDefaultPolicy(policy => policy.With
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnect");
 Console.WriteLine(connectionString);
-builder.Services.AddDbContext<StoreDbContex>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
+//builder.Services.AddDbContext<StoreDbContex>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddDbContext<StoreDbContex>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IProducts, ProductRepositories>();
 builder.Services.AddScoped<IProductType, ProductTypeRepo>();

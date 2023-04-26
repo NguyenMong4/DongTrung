@@ -5,8 +5,15 @@ namespace WebDongTrung.Datas
 {
     public class StoreDbContex : DbContext
     {
-        public StoreDbContex(DbContextOptions<StoreDbContex> options) : base(options) { }
-
+        public StoreDbContex(DbContextOptions<StoreDbContex> options) : base(options) {
+           
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var connectinString = "Server=222.252.22.153;Port = 11006;Database=DongTrungHaThao;user id=root;password=root";
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseMySql(connectinString, ServerVersion.AutoDetect(connectinString));
+        }
         public DbSet<Product>? Products { get; set; }
         public DbSet<Advertisement>? Advertisements { get; set; }
         public DbSet<Blog>? Blogs { get; set; }
