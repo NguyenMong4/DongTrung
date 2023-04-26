@@ -17,16 +17,21 @@ namespace WebDongTrung.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProducts _product;
+        private readonly IConfiguration _configuration;
 
-        public ProductsController(IProducts product)
+        public ProductsController(IProducts product, IConfiguration configuration)
         {
             _product = product;
+            _configuration = configuration;
+
         }
         [HttpGet]
         public async Task<IActionResult> GetAllProduct(string? search, string? sortBy, int? productType, int? page)
         {
             try
             {
+                var connectionString = _configuration.GetConnectionString("DefaultConnect");
+                Console.WriteLine(connectionString);
                 return Ok(await _product.GetAllProductAsync(search, sortBy, productType, page));
             }
             catch
