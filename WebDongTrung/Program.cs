@@ -21,6 +21,7 @@ builder.Services.AddCors(option => option.AddDefaultPolicy(policy => policy.With
 //builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<StoreDbContex>().AddDefaultTokenProviders();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnect");
+Console.WriteLine(connectionString);
 builder.Services.AddDbContext<StoreDbContex>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddAutoMapper(typeof(Program));
