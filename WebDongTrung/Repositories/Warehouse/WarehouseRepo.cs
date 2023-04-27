@@ -74,18 +74,19 @@ public class WarehouseRepo : IWarehouse
         return await bills.OrderBy(x => x.CreateAt).ToListAsync();
     }
 
-    public async Task<ImportBillModel> GetWarehouseAsync(string id)
+    public async Task<ImportBillModel?> GetWarehouseAsync(string id)
     {
         var warehouse = await _contex.ImportBills!.AsNoTracking()
             .Where(x => x.Id == id)
             .Include(x => x.Warehouses).ThenInclude(x => x.Product)
             .ToListAsync();
+        if (warehouse.Count == 0) { return null; }
         return new ImportBillModel
         {
             Id = warehouse[0].Id,
             Import_date = warehouse[0].Import_date,
             Total_price = warehouse[0].Total_price,
-            ProductWarehouses = warehouse[0].Warehouses.Select(x => new ProductWarehouseModel
+            ProductWarehouses = warehouse[0].Warehouses!.Select(x => new ProductWarehouseModel
             {
                 ProductId = x.ProductId,
                 NameProduct = x.Product!.Name,
@@ -97,6 +98,12 @@ public class WarehouseRepo : IWarehouse
 
     public async Task UpdateWarehouseAsync(string id, ImportBillModel warehouseModel, string? username)
     {
+        var warehouseDelete = _contex.Warehouses!.SingleOrDefault(e => e.BillId == id);
+        if (warehouseDelete != null)
+        {
+            _contex.Warehouses!.Remove(warehouseDelete);
+            await _contex.SaveChangesAsync();
+        }
         warehouseModel.Id = id;
         var impBill = _mapper.Map<ImportBill>(warehouseModel);
         impBill.UpdateAt = DateTime.Now;
@@ -106,7 +113,7 @@ public class WarehouseRepo : IWarehouse
         {
             var warehouse = _mapper.Map<Warehouse>(item);
             warehouse.BillId = id;
-            _contex.Warehouses!.Update(warehouse);
+            await _contex.Warehouses!.AddAsync(warehouse);
         }
         await _contex.SaveChangesAsync();
     }
