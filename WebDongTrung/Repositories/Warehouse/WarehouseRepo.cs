@@ -21,30 +21,27 @@ public class WarehouseRepo : IWarehouse
     {
         try
         {
+            int? totalPrice = 0;
             string id = "Imp" + DateTime.Now.ToString("yyyyMMddHHmm");
             var impBill = _mapper.Map<ImportBill>(newWarehouse);
             impBill.Id = id;
             impBill.CreateAt = DateTime.Now;
             impBill.CreateId = username;
-            _contex.ImportBills!.Add(impBill);
+
             foreach (var item in newWarehouse.ProductWarehouses)
             {
-                var product = _contex.Products!.SingleOrDefault(p => p.Id == item.IdProduct);
-                if (product != null)
+                Warehouse wh = new()
                 {
-                    Warehouse wh = new()
-                    {
-                        BillId = id,
-                        ProductId = item.IdProduct,
-                        ImportPrice = item.ImportPrice,
-                        ImportQuantity = item.ImportQuantity,
-                    };
-                    product.RealityQuantity += item.ImportQuantity;
-                    product.SystemQuantity += item.ImportQuantity;
-                    _contex.Products!.Update(product);
-                    _contex.Warehouses!.Add(wh);
-                }
+                    BillId = id,
+                    ProductId = item.IdProduct,
+                    ImportPrice = item.ImportPrice,
+                    ImportQuantity = item.ImportQuantity,
+                };
+                totalPrice += item.ImportPrice;
+                _contex.Warehouses!.Add(wh);
             }
+            impBill.Total_price = totalPrice;
+            _contex.ImportBills!.Add(impBill);
             await _contex.SaveChangesAsync();
             return id;
         }
@@ -56,11 +53,11 @@ public class WarehouseRepo : IWarehouse
 
     public async Task DeleteWarehouseAsync(string id)
     {
-        var warehouse = _contex.Warehouses!.SingleOrDefault(e => e.BillId == id);
+        var warehouse = _contex.Warehouses!.Where(e => e.BillId == id);
         var bill = _contex.ImportBills!.SingleOrDefault(e => e.Id == id);
         if (warehouse != null && bill != null)
         {
-            _contex.Warehouses!.Remove(warehouse);
+            _contex.Warehouses!.RemoveRange(warehouse);
             _contex.ImportBills!.Remove(bill);
             await _contex.SaveChangesAsync();
         }
@@ -98,23 +95,27 @@ public class WarehouseRepo : IWarehouse
 
     public async Task UpdateWarehouseAsync(string id, ImportBillModel warehouseModel, string? username)
     {
-        var warehouseDelete = _contex.Warehouses!.SingleOrDefault(e => e.BillId == id);
+        var warehouseDelete = _contex.Warehouses!.Where(e => e.BillId == id);
         if (warehouseDelete != null)
         {
-            _contex.Warehouses!.Remove(warehouseDelete);
+            _contex.Warehouses!.RemoveRange(warehouseDelete);
             await _contex.SaveChangesAsync();
         }
         warehouseModel.Id = id;
+        int? totalPrice = 0;
         var impBill = _mapper.Map<ImportBill>(warehouseModel);
         impBill.UpdateAt = DateTime.Now;
         impBill.UpdateId = username;
-        _contex.ImportBills!.Update(impBill);
+
         foreach (var item in warehouseModel.ProductWarehouses)
         {
             var warehouse = _mapper.Map<Warehouse>(item);
             warehouse.BillId = id;
+            totalPrice += warehouse.ImportPrice;
             await _contex.Warehouses!.AddAsync(warehouse);
         }
+        impBill.Total_price = totalPrice;
+        _contex.ImportBills!.Update(impBill);
         await _contex.SaveChangesAsync();
     }
 }
