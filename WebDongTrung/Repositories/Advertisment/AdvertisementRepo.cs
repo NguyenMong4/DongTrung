@@ -59,10 +59,15 @@ namespace WebDongTrung.Repositories.Advertisment
             }
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAllAdvertisAsync()
+        public async Task<IEnumerable<Advertisement>> GetAllAdvertisAsync(bool view = true)
         {
-            var advertisements = await _context.Advertisements!.Where(x => x.Status!.Equals("1")).ToListAsync();
-            return _mapper.Map<IEnumerable<Advertisement>>(advertisements);
+            var advertisements =  _context.Advertisements!.AsQueryable();
+            if (view)
+            {
+                advertisements = advertisements.Where(x => x.Status!.Equals("1"));
+            }
+            var lstAdvertis = await advertisements.ToListAsync();
+            return _mapper.Map<IEnumerable<Advertisement>>(lstAdvertis);
         }
 
         public async Task<Advertisement> GetAdvertisAsync(int id)

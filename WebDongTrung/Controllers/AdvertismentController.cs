@@ -16,11 +16,23 @@ namespace WebDongTrung.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAlladvertiss()
+        public async Task<IActionResult> GetAlladvertisDisplay()
         {
             try
             {
                 return Ok(await _advertis.GetAllAdvertisAsync());
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+         [HttpGet("AllAdvertis")]
+        public async Task<IActionResult> GetAlladvertis()
+        {
+            try
+            {
+                return Ok(await _advertis.GetAllAdvertisAsync(false));
             }
             catch
             {
