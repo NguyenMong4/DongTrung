@@ -23,7 +23,6 @@ namespace WebDongTrung.Controllers
         {
             _product = product;
             _configuration = configuration;
-
         }
         [HttpGet]
         public async Task<IActionResult> GetAllProduct(string? search, string? sortBy, int? productType, int? page)
@@ -43,6 +42,11 @@ namespace WebDongTrung.Controllers
         public IActionResult GetAllProductDiscount()
         {
             return Ok(_product.GetProductsDiscount());
+        }
+        [HttpGet("OutStanding")]
+        public IActionResult GetProductOutStanding()
+        {
+            return Ok(_product.GetProductsOutStanding());
         }
 
         [HttpGet("{id}")]

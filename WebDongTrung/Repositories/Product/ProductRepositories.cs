@@ -195,5 +195,17 @@ namespace WebDongTrung.Repositories
             await _contex.SaveChangesAsync();
             return productQuery;
         }
+
+        public IEnumerable<ProductModel> GetProductsOutStanding()
+        {
+            return _contex.Products!.OrderByDescending(x=>x.Id).Take(5).Select(p => new ProductModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Photo = p.Photo,
+                Discount = p.Discount
+            });
+        }
     }
 }

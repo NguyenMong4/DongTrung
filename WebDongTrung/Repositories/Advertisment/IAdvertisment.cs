@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories.Advertisment
@@ -14,5 +11,6 @@ namespace WebDongTrung.Repositories.Advertisment
         public Task<int> AddAdvertisAsync(AdvertisementModel advertisementModel, string? username);
         public Task UpdateAdvertisAsync(int id, AdvertisementModel advertisementModel, string? username);
         public Task DeleteAdvertisAsync(int id);
+        public Task<Advertisement> UpdateStatusAsync(int id, string? userName, UpdateStatusDto statusDto);
     }
 }

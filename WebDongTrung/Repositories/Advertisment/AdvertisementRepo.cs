@@ -1,6 +1,9 @@
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.EntityFrameworkCore;
 using WebDongTrung.Datas;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
 
 namespace WebDongTrung.Repositories.Advertisment
@@ -32,10 +35,10 @@ namespace WebDongTrung.Repositories.Advertisment
                     using FileStream fs = new(filePath, FileMode.Create);
                     advertisementModel.PhotoFile.CopyTo(fs);
                     fs.Close();
-
                 }
                 adver.CreateAt = DateTime.Now;
                 adver.CreateId = username;
+                adver.Status = "1";
                 var id = _context.Advertisements!.Add(adver);
                 await _context.SaveChangesAsync();
                 return adver.Id;
@@ -58,7 +61,7 @@ namespace WebDongTrung.Repositories.Advertisment
 
         public async Task<IEnumerable<Advertisement>> GetAllAdvertisAsync()
         {
-            var advertisements = await _context.Advertisements!.ToListAsync();
+            var advertisements = await _context.Advertisements!.Where(x => x.Status!.Equals("1")).ToListAsync();
             return _mapper.Map<IEnumerable<Advertisement>>(advertisements);
         }
 
@@ -93,6 +96,26 @@ namespace WebDongTrung.Repositories.Advertisment
             {
                 throw new Exception(e.Message);
             }
+        }
+        public async Task<Advertisement> UpdateStatusAsync(int id, string? userName, UpdateStatusDto status)
+        {
+            var advertisQuery = await GetAdvertisAsync(id);
+            if (advertisQuery == null)
+            {
+                return advertisQuery;
+            }
+            advertisQuery.UpdateId = userName;
+            advertisQuery.UpdateAt = DateTime.Now;
+            JsonPatchDocument advDocument = new();
+            advDocument.Operations.Add(new Operation
+            {
+                op = "replace",
+                path = "Status",
+                value = status.Status
+            });
+            advDocument.ApplyTo(advertisQuery);
+            await _context.SaveChangesAsync();
+            return advertisQuery;
         }
     }
 }

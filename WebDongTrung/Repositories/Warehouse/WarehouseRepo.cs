@@ -33,7 +33,7 @@ public class WarehouseRepo : IWarehouse
                 Warehouse wh = new()
                 {
                     BillId = id,
-                    ProductId = item.IdProduct,
+                    ProductId = item.ProductId,
                     ImportPrice = item.ImportPrice,
                     ImportQuantity = item.ImportQuantity,
                 };

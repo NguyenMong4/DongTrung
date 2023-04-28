@@ -14,5 +14,6 @@ namespace WebDongTrung.Repositories
         public Task<ProductGetAllDto> GetAllProductAsync(string? search,string? sortBy, int? productType, int? page);
         public IEnumerable<ProductModel> GetProductsDiscount();
         public Task<Product> UpdateQuantityAsync(int id, string? userName, UpdateQuantityDto updateQuantityDto);
+        public IEnumerable<ProductModel> GetProductsOutStanding();
     }
 }

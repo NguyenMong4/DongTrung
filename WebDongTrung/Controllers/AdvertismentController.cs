@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebDongTrung.DTO.Cart;
 using WebDongTrung.Models;
 using WebDongTrung.Repositories.Advertisment;
 
@@ -73,6 +74,22 @@ namespace WebDongTrung.Controllers
             {
                 await _advertis.DeleteAdvertisAsync(id);
                 return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateStatusCart(int id,[FromBody] UpdateStatusDto statusDto)
+        {
+            try
+            {
+                var username = Request.Cookies["CookieUserName"];
+                var updateStatus = await _advertis.UpdateStatusAsync(id, username, statusDto);
+                if(updateStatus == null)
+                    return NotFound();
+                return Ok(updateStatus);
             }
             catch
             {
