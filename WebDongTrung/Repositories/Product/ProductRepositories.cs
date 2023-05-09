@@ -90,7 +90,7 @@ namespace WebDongTrung.Repositories
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
                     var filePath = Path.Combine(directory, productCreate.PhotoFile.FileName);
-                    product.Photo = $"wwwroot/images/{productCreate.PhotoFile.FileName}";
+                    product.Photo = $"images/{productCreate.PhotoFile.FileName}";
                     using FileStream fs = new(filePath, FileMode.Create);
                     productCreate.PhotoFile.CopyTo(fs);
                     fs.Close();
@@ -133,7 +133,7 @@ namespace WebDongTrung.Repositories
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
                     var filePath = Path.Combine(directory, productUpdate.PhotoFile.FileName);
-                    product.Photo = $"wwwroot/images/{productUpdate.PhotoFile.FileName}";
+                    product.Photo = $"images/{productUpdate.PhotoFile.FileName}";
                     using FileStream fs = new(filePath, FileMode.Create);
                     productUpdate.PhotoFile.CopyTo(fs);
                     fs.Close();
