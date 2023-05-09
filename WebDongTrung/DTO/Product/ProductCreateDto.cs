@@ -15,7 +15,8 @@ namespace WebDongTrung.DTO.Product
         public int Discount { get; set; }
         public string? GeneralInformation { get; set; }
         [NotMapped]
-        public IFormFile? PhotoFile {get;set;}
-        public int? RealityQuantity {get;set;}
+        public IFormFile? PhotoFile { get; set; }
+        public string? Photo { get; set; }
+        public int? RealityQuantity { get; set; }
     }
 }

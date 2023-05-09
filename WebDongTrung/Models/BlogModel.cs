@@ -9,5 +9,6 @@ namespace WebDongTrung.Models
         public int? Type { get; set; }
         [NotMapped]
         public IFormFile? PhotoFile { get; set; }
+        public string? Photo { get; set; }
     }
 }
