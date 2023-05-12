@@ -31,7 +31,7 @@ namespace WebDongTrung.Repositories.Advertisment
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
                     var filePath = Path.Combine(directory, advertisementModel.PhotoFile.FileName);
-                    adver.Photo = $"wwwroot/images/{advertisementModel.PhotoFile.FileName}";
+                    adver.Photo = $"/images/{advertisementModel.PhotoFile.FileName}";
                     using FileStream fs = new(filePath, FileMode.Create);
                     advertisementModel.PhotoFile.CopyTo(fs);
                     fs.Close();
@@ -86,7 +86,7 @@ namespace WebDongTrung.Repositories.Advertisment
                     var directory = Path.Combine(_env.ContentRootPath, "wwwroot/images");
                     Directory.CreateDirectory(directory);
                     var filePath = Path.Combine(directory, advertisementModel.PhotoFile.FileName);
-                    adver.Photo = $"wwwroot/images/{advertisementModel.PhotoFile.FileName}";
+                    adver.Photo = $"/images/{advertisementModel.PhotoFile.FileName}";
                     using FileStream fs = new(filePath, FileMode.Create);
                     advertisementModel.PhotoFile.CopyTo(fs);
                     fs.Close();
