@@ -10,7 +10,8 @@ namespace WebDongTrung.Datas
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectinString = "Server=222.252.22.153;Port = 11006;Database=DongTrungHaThao;user id=root;password=root";
+           // var connectinString = "Server=222.252.22.153;Port = 11006;Database=DongTrungHaThao;user id=root;password=root";
+             var connectinString = "Server=14.255.204.144;Port = 3306;Database=DongTrungHaThao;user id=root;password=nguyena4";
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseMySql(connectinString, ServerVersion.AutoDetect(connectinString));
         }
