@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using WebDongTrung.Models;
@@ -17,7 +18,7 @@ namespace WebDongTrung.Controllers
     {
         public IConfiguration _config = null!;
         public IEmployees _employee;
-        public AccountController(IConfiguration config, IEmployees employee )
+        public AccountController(IConfiguration config, IEmployees employee)
         {
             _config = config;
             _employee = employee;
@@ -34,21 +35,25 @@ namespace WebDongTrung.Controllers
                 new KeyValuePair<string, string>("grant_type", "password")
             });
             var respon = await clien.PostAsync($"{_config["KeyCloak:url"]}/realms/{_config["KeyCloak:realms"]}/protocol/openid-connect/token", content);
-            if(!respon.IsSuccessStatusCode){
-                switch(respon!.StatusCode){
+            if (!respon.IsSuccessStatusCode)
+            {
+                switch (respon!.StatusCode)
+                {
                     case System.Net.HttpStatusCode.Unauthorized:
-                    Response.StatusCode = (int)respon.StatusCode;
-                    return new JsonResult(null);
+                        Response.StatusCode = (int)respon.StatusCode;
+                        return new JsonResult(null);
                 }
             }
             var authenticationResponse = JsonSerializer.Deserialize<AuthenticationResponse>(await respon.Content.ReadAsStringAsync());
-            var userName =  new JwtSecurityToken(authenticationResponse.access_token).Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
-            Response.Cookies.Append("CookieAccestoken",authenticationResponse.access_token,new CookieOptions(){
+            var userName = new JwtSecurityToken(authenticationResponse.access_token).Claims.FirstOrDefault(c => c.Type == "preferred_username").Value;
+            Response.Cookies.Append("CookieAccestoken", authenticationResponse.access_token, new CookieOptions()
+            {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = false,
             });
-            Response.Cookies.Append("CookieUserName",userName,new CookieOptions(){
+            Response.Cookies.Append("CookieUserName", userName, new CookieOptions()
+            {
                 HttpOnly = true,
                 SameSite = SameSiteMode.None,
                 Secure = false,
@@ -65,7 +70,7 @@ namespace WebDongTrung.Controllers
             client.DefaultRequestHeaders.Remove("Accept");
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
             client.DefaultRequestHeaders.Remove("Authorization");
-            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization","Bearer " + token);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + token);
             HttpRequestMessage requestMessage = new()
             {
                 Method = HttpMethod.Post,
@@ -172,6 +177,36 @@ namespace WebDongTrung.Controllers
             await client.DeleteAsync($"{_config["KeyCloak:url"]}/admin/realms/master/users/{id}");
             await _employee.DeleteEmployeeAsync(username);
             return Ok();
+        }
+
+        [HttpPut("VerifyEmail")]
+        public async Task<IActionResult> Verify_email([FromBody]string id)
+        {
+            try
+            {
+                //var token = new KeycloakServiceAccount(_config["KeyCloak:url"], _config["KeyCloak:realms"], _config["KeyCloak:client_id"], _config["KeyCloak:client_secret"]).GetToken().Result;
+                var token = Request.Cookies["CookieAccestoken"];
+                HttpClient client = new();
+                client.DefaultRequestHeaders.Remove("Accept");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
+                client.DefaultRequestHeaders.Remove("Authorization");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + token);
+                string [] strArray = {"VERIFY_EMAIL"};
+                HttpRequestMessage requestMessage = new()
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri($"{_config["KeyCloak:url"]}admin/realms/{_config["KeyCloak:realms"]}/users/{id}/execute-actions-email"),
+                    Content = new StringContent(JsonSerializer.Serialize(strArray), Encoding.UTF8, "application/json")
+                };
+
+                var respone = await client.SendAsync(requestMessage);
+                var msg = await requestMessage.Content.ReadAsStringAsync();
+                return respone == null ? BadRequest() : Ok();
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
